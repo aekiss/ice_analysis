@@ -112,6 +112,10 @@ for e in exptdict.values():
 clim_tend = pd.to_datetime('2019', format='%Y')
 clim_tstart = clim_tend - pd.DateOffset(years=20)
 
+# as in Kiss et al (GMD, 2020)
+clim_tend = pd.to_datetime('2018', format='%Y')
+clim_tstart = clim_tend - pd.DateOffset(years=25)
+
 
 #################################################################################################
 # functions to share across all notebooks
