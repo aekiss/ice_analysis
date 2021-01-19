@@ -6,10 +6,9 @@
 # https://github.com/COSIMA/ACCESS-OM2-1-025-010deg-report/issues/6
 
 # load this with
-#     import sys, os
-#     sys.path.append(os.path.join(os.getcwd(), '..'))  # so we can import ../exptdata
 #     import exptdata
-# in figures/subdir/your_notebook.ipynb
+
+import cosima_cookbook as cc
 
 from collections import OrderedDict
 import os
@@ -32,59 +31,86 @@ basedir = '/g/data/hh5/tmp/cosima/'
 # NB: offset changes effect of time_units: https://github.com/COSIMA/cosima-cookbook/issues/113
 # Also MOM and CICE have different time_units: https://github.com/COSIMA/access-om2/issues/117#issuecomment-446465761
 # so the time_units specified here may need to be overridden when dealing with CICE data - e.g. see ice_validation.ipynb
+
+# TODO: make into an array, one element per cycle??
 exptdict = OrderedDict([
-    ('1deg',   {'model':'access-om2', 'expt':'1deg_jra55v13_iaf_spinup1_B1',  #'1deg_jra55v13_iaf_spinup1_B1', #'1deg_jra55v13_iaf_spinup1_A',
-                'desc': 'ACCESS-OM2','n_files':-12,
-                'time_units':'days since 1718-01-01','offset':-87658}),
-    ('025deg', {'model':'access-om2-025', 'expt':'025deg_jra55v13_iaf_gmredi6',
-                    'desc': 'ACCESS-OM2-025','n_files':-34,
-                    'time_units':'days since 1718-01-01','offset':-87658}),
-    ('01deg',  {'model':'access-om2-01',  'expt':'01deg_jra55v13_iaf',
-                'desc': 'ACCESS-OM2-01','n_files':None,
-                    'time_units':'days since 0001-01-01','offset':None})
+    ('1deg',   {'model': 'access-om2', 'expt': '1deg_jra55_iaf_omip2-fixed',
+                'exptdir': '/scratch/v45/hh0162/access-om2/archive/1deg_jra55_iaf_omip2-fixed',
+                'dbpath': '/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/1deg_jra55_iaf_omip2-fixed.db',
+                'desc': 'ACCESS-OM2', 'n_files': -12,
+                'time_units': 'days since 1718-01-01', 'offset': -87658,
+                'gridpath': '/g/data/ik11/grids/ocean_grid_025.nc',
+#                 'geolon_t_file': 'ocean_grid.nc',
+#                 'geolat_t_file': 'ocean_grid.nc'
+               }),
+    ('025deg', {'model': 'access-om2-025', 'expt': '025deg_jra55_iaf_amoctopo_cycle1',
+                'exptdir': '/scratch/e14/rmh561/access-om2/archive/025deg_jra55_iaf_amoctopo_cycle1',
+                'dbpath': '/scratch/e14/rmh561/access-om2/archive/databases/cc_database_omip',
+                'desc': 'ACCESS-OM2-025', 'n_files' :-34,
+                'time_units': 'days since 1718-01-01', 'offset': -87658,
+                'gridpath': '/g/data/ik11/grids/ocean_grid_025.nc',
+#                 'geolon_t_file': 'ocean_grid.nc',
+#                 'geolat_t_file': 'ocean_grid.nc'
+               }),
+    ('01deg',  {'model': 'access-om2-01',  'expt': '01deg_jra55v140_iaf',
+                'exptdir': '/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3',
+                'dbpath': '/g/data/v45/aek156/notebooks/github/aekiss/CC_sandbox/cyc3_database_analysis3-20p07.db',
+                'desc': 'ACCESS-OM2-01', 'n_files': None,
+                'time_units': 'days since 0001-01-01', 'offset': None,
+                'gridpath': '/g/data/ik11/grids/ocean_grid_025.nc',
+#                 'geolon_t_file': 'ocean-2d-geolon_t.nc',
+#                 'geolat_t_file': 'ocean-2d-geolat_t.nc'
+               })
 ])
 
-# Now add expdirs programmatically where they don't already exist.
-# This allows expdir to be overridden by specifying it above if needed.
-for k in exptdict.keys():
-    if not('exptdir' in exptdict[k]):
-        exptdict[k]['exptdir'] = os.path.join(os.path.join(
-            basedir, 
-            exptdict[k]['model']),
-            exptdict[k]['expt' ])
+
+# Now add sessions where they don't already exist.
+# TODO: reuse sessions from previous experiments if dbpath is the same
+for e in exptdict.values():
+    if not('session' in e):
+        e['session'] = cc.database.create_session(e['dbpath'])
+
+# # Now add expdirs programmatically where they don't already exist.
+# # This allows expdir to be overridden by specifying it above if needed.
+# for k in exptdict.keys():
+#     if not('exptdir' in exptdict[k]):
+#         exptdict[k]['exptdir'] = os.path.join(os.path.join(
+#             basedir, 
+#             exptdict[k]['model']),
+#             exptdict[k]['expt' ])
 
 
-# Lists of models, experiments dirs and descriptors in consistent order
+# # Lists of models, experiments dirs and descriptors in consistent order
+# 
+# models    = [exptdict[k]['model']   for k in exptdict.keys()]
+# 
+# expts     = [exptdict[k]['expt']    for k in exptdict.keys()]
+# 
+# # exptdirs  = [exptdict[k]['exptdir'] for k in exptdict.keys()]
+# 
+# descs     = [exptdict[k]['desc']    for k in exptdict.keys()]
+# 
+# def model_expt_exptdir_desc(keyname):
+#     """
+#     Return (model, expt, exptdir, desc) strings for keyname in exptdict.keys()
+# 
+#     Examples:
+# 
+#     (model, expt, exptdir, desc) = model_expt_exptdir_desc('1deg')
+# 
+#     for k in exptdict.keys():
+#         (model, expt, exptdir, desc) = model_expt_exptdir_desc(k)
+# 
+#     """
+#     return (exptdict[keyname]['model'],
+#             exptdict[keyname]['expt'],
+#             exptdict[keyname]['exptdir'],
+#             exptdict[keyname]['desc'])
+# 
 
-models    = [exptdict[k]['model']   for k in exptdict.keys()]
-
-expts     = [exptdict[k]['expt']    for k in exptdict.keys()]
-
-exptdirs  = [exptdict[k]['exptdir'] for k in exptdict.keys()]
-
-descs     = [exptdict[k]['desc']    for k in exptdict.keys()]
-
-def model_expt_exptdir_desc(keyname):
-    """
-    Return (model, expt, exptdir, desc) strings for keyname in exptdict.keys()
-    
-    Examples:
-    
-    (model, expt, exptdir, desc) = model_expt_exptdir_desc('1deg')
-    
-    for k in exptdict.keys():
-        (model, expt, exptdir, desc) = model_expt_exptdir_desc(k)
-    
-    """
-    return (exptdict[keyname]['model'],
-            exptdict[keyname]['expt'],
-            exptdict[keyname]['exptdir'],
-            exptdict[keyname]['desc'])
-
-
-# define common start and end dates for climatologies
-clim_tstart = pd.to_datetime('1993', format='%Y')
-clim_tend = clim_tstart + pd.DateOffset(years=25)
+# define common start and end year for climatologies (Jan 1 assumed)
+clim_tend = pd.to_datetime('2019', format='%Y')
+clim_tstart = clim_tend - pd.DateOffset(years=20)
 
 
 #################################################################################################
