@@ -34,7 +34,7 @@ basedir = '/g/data/hh5/tmp/cosima/'
 
 # TODO: make into an array, one element per cycle??
 exptdict = OrderedDict([
-    ('1deg',   {'model': 'access-om2', 'expt': '1deg_jra55_iaf_omip2-fixed',
+    ('1deg',   {'model': 'access-om2', 'expt': '1deg_jra55_iaf_omip2-fixed', # 6 x 61-year cycles, 1 year per run
                 'exptdir': '/scratch/v45/hh0162/access-om2/archive/1deg_jra55_iaf_omip2-fixed',
                 'dbpath': '/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/1deg_jra55_iaf_omip2-fixed.db',
                 'desc': 'ACCESS-OM2', 'n_files': -12,
