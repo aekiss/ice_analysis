@@ -33,30 +33,59 @@ basedir = '/g/data/hh5/tmp/cosima/'
 # so the time_units specified here may need to be overridden when dealing with CICE data - e.g. see ice_validation.ipynb
 
 exptdict = OrderedDict([
-    ('1deg',   {'model': 'access-om2', 'expt': '1deg_jra55_iaf_omip2-fixed', # 6 x 61-year cycles, 1 year per run
-                'exptdir': '/scratch/v45/hh0162/access-om2/archive/1deg_jra55_iaf_omip2-fixed',
+#     ('1deg',   {'model': 'access-om2',
+#                 'expt': '1deg_jra55_iaf_omip2-fixed', # 6 x 61-year cycles, 1 year per run
+#                 'exptdir': '/scratch/v45/hh0162/access-om2/archive/1deg_jra55_iaf_omip2-fixed',
+#                 'dbpath': '/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/1deg_jra55_iaf_omip2-fixed.db',
+#                 'desc': 'ACCESS-OM2',
+#                 'n_files': -12,
+#                 'time_units': 'days since 1718-01-01',
+#                 'offset': -87658,
+#                 'gridpaths': ['/g/data/ik11/grids/ocean_grid_10.nc'],
+#                 'cycles': 6
+#                }),
+    ('1deg',   {'model': 'access-om2',
+                'expt': '1deg_jra55_iaf_omip2-fixed_cycle', # cycle number appended below
+                'exptdir': '/scratch/v45/aek156/access-om2/archive/1deg_jra55_iaf_omip2-fixed_cycle', # cycle number appended below
                 'dbpath': '/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/1deg_jra55_iaf_omip2-fixed.db',
-                'desc': 'ACCESS-OM2', 'n_files': -12,
-                'time_units': 'days since 1718-01-01', 'offset': -87658,
-                'gridpath': '/g/data/ik11/grids/ocean_grid_10.nc',
+                'desc': 'ACCESS-OM2',
+                'n_files': -12,
+                'time_units': 'days since 1718-01-01',
+                'offset': -87658,
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_10.nc'],
                 'cycles': 6
                }),
-    ('025deg', {'model': 'access-om2-025', 'expt': '025deg_jra55_iaf_amoctopo_cycle', # cycle number appended below
+    ('025deg', {'model': 'access-om2-025',
+                'expt': '025deg_jra55_iaf_amoctopo_cycle', # cycle number appended below
                 'exptdir': '/scratch/e14/rmh561/access-om2/archive/025deg_jra55_iaf_amoctopo_cycle', # cycle number appended below
                 'dbpath': '/scratch/e14/rmh561/access-om2/archive/databases/cc_database_omip',
-                'desc': 'ACCESS-OM2-025', 'n_files' :-34,
-                'time_units': 'days since 1718-01-01', 'offset': -87658,
-                'gridpath': '/g/data/ik11/grids/ocean_grid_025.nc',
+                'desc': 'ACCESS-OM2-025',
+                'n_files' :-34,
+                'time_units': 'days since 1718-01-01',
+                'offset': -87658,
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_025.nc'],
                 'cycles': 6
                }),
-    ('01deg',  {'model': 'access-om2-01',  'expt': '01deg_jra55v140_iaf',
-                'exptdir': '/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3',
-                'dbpath': '/g/data/v45/aek156/notebooks/github/aekiss/CC_sandbox/cyc3_database_analysis3-20p07.db',
-                'desc': 'ACCESS-OM2-01', 'n_files': None,
-                'time_units': 'days since 0001-01-01', 'offset': None,
-                'gridpath': '/g/data/ik11/grids/ocean_grid_01.nc',
+    ('01deg',  {'model': 'access-om2-01',
+                'expt': '01deg_jra55v140_iaf',
+                'exptdir': '/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf',
+                'dbpath': '/g/data/ik11/databases/cosima_master.db',
+                'desc': 'ACCESS-OM2-01',
+                'n_files': None,
+                'time_units': 'days since 0001-01-01',
+                'offset': None,
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_01.nc', '/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf/output000/ocean/ocean-2d-area_t.nc'],
                 'cycles': 3
                })
+
+#     ('01deg',  {'model': 'access-om2-01',  'expt': '01deg_jra55v140_iaf',
+#                 'exptdir': '/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3',
+#                 'dbpath': '/g/data/v45/aek156/notebooks/github/aekiss/CC_sandbox/cyc3_database_analysis3-20p07.db',
+#                 'desc': 'ACCESS-OM2-01', 'n_files': None,
+#                 'time_units': 'days since 0001-01-01', 'offset': None,
+#                 'gridpath': '/g/data/ik11/grids/ocean_grid_01.nc',
+#                 'cycles': 3
+#                })
 ])
 
 # Now add sessions where they don't already exist.
@@ -65,15 +94,24 @@ for e in exptdict.values():
     if not('session' in e):
         e['session'] = cc.database.create_session(e['dbpath'])
 
+        
 # set up multiple cycles
 for k, e in exptdict.items():
     exptdict[k] = [e.copy() for c in range(e['cycles'])]
 
-for c, ec in enumerate(exptdict['025deg']):
-    ec['expt'] += str(c+1)
-    ec['exptdir'] += str(c+1)
+for ekey in ['1deg', '025deg']:
+    for c, ec in enumerate(exptdict[ekey]):
+        ec['expt'] += str(c+1)
+        ec['exptdir'] += str(c+1)
 
-# TODO: also set up variables for the other resolutions! they are currently all the same    
+exptdict['01deg'][1]['expt'] += '_cycle2'
+exptdict['01deg'][1]['exptdir'] += '_cycle2'
+
+exptdict['01deg'][2]['expt'] = '01deg_jra55v140_iaf_cycle3'
+exptdict['01deg'][2]['exptdir'] = '/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3'
+exptdict['01deg'][2]['dbpath'] = '/g/data/v45/aek156/notebooks/github/aekiss/CC_sandbox/cyc3_database_analysis3-20p07.db'
+exptdict['01deg'][2]['session'] = cc.database.create_session(exptdict['01deg'][2]['dbpath'])
+
 
 
 # define common start and end year for climatologies (Jan 1 assumed)
