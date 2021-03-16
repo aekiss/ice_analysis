@@ -1,0 +1,1107 @@
+\documentclass[aspectratio=169, xcolor=table]{beamer}
+\usepackage{enumitem}
+%\setlist[enumerate]{label=\arabic*.}% see https://tex.stackexchange.com/questions/24371/does-enumitem-conflict-with-beamer-for-lists/24491
+\setenumerate[1]{label=\arabic*.}\newcounter{ResumeEnumerate}% see https://latex.org/forum/viewtopic.php?t=9362&start=10
+\setitemize{label=\usebeamerfont*{itemize item}% see https://tex.stackexchange.com/questions/24371/does-enumitem-conflict-with-beamer-for-lists/24491
+  \usebeamercolor[fg]{itemize item}
+  \usebeamertemplate{itemize item}}
+\usepackage[strings]{underscore} % allows hyphenation at underscores
+\usepackage{datetime2}\DTMsetdatestyle{iso}
+
+%\usepackage{ifthen}
+%\newboolean{movies}\setboolean{movies}{true} % whether to embed movies - MAY NEED TO RUN TWICE!
+%\usepackage{colortbl}
+%\usepackage[table]{xcolor}    % loads also »colortbl«
+%\usepackage{colortbl}
+\definecolor{lightblue}{rgb}{0.93,0.95,1.0}
+%\rowcolors{2}{blue!4}{white}
+%\rowcolors{1}{lightblue}{white}
+
+%\usepackage{transparent}
+
+% \usepackage{beamerthemesplit} // Activate for custom appearance
+\usepackage{qrcode}
+\usepackage{tabularx}
+%\usepackage{media9}
+\usepackage{sistyle} % TODO: replace with siunitx?
+
+% - from  CTAN: http://www.ctan.org/tex-archive/macros/latex/contrib/movie15/
+% see http://darkwing.uoregon.edu/~noeckel/PDFmovie.html
+% [autoplay,autoresume,poster,repeat]
+%\usepackage{movie15}
+%\newcommand{\run}[1]{\small{\href{run:#1}{$\triangleright$}}}
+%\ifthenelse{\boolean{movies}}
+%{
+%\newcommand{\postermoviewidth}[3]{\includemovie[mimetype=video/mpeg, controls=true, %autoplay, 
+%autopause, repeat, text={\includegraphics[width=#3]{#1}}]{#3}{}{#2}\\[-0.7ex]\hfill\run{#2}} % movie should play on page when clicked (this movie is embedded in the PDF). The triangle is a fallback to run the movie from a separate file in another window.
+%}
+%{
+%\newcommand{\postermoviewidth}[3]{\href{run:#2}{\includegraphics[width=#3]{#1}}\\[-0.7ex]\hfill\tiny{\textbf{\href{run:#2}{\phantom{Click here to play the movie in a separate window}
+%}}}\hfill \small{\href{run:#2}{$\triangleright$}}
+%} % movie plays from a separate file in a separate window (not embedded in PDF).
+%}
+
+
+\usepackage{tikz}
+
+\tikzset{
+    state/.style={
+           rectangle,
+           rounded corners,
+           draw=black, ultra thick,
+           minimum height=2em,
+           inner sep=2pt,
+           text centered,
+           text width=40ex
+           },
+}
+
+\usepackage[percent]{overpic}
+
+\urlstyle{sf} % rm, sf, tt or same
+% from http://www.kronto.org/thesis/tips/url-formatting.html
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\normalsize\ttfamily}}}
+\makeatother
+%% Now actually use the newly defined style.
+\urlstyle{leo}
+\usepackage[scaled=.9]{inconsolata} % for texttt
+
+
+\def\colorize<#1>{%
+           \temporal<#1>{\color{black!25}}{\color{red!75!black}}{\color{black}}}
+
+%\usebackgroundtemplate{{\centering \includegraphics[width=\paperwidth,keepaspectratio=true]{figures/southern-ocean-faint.png}\par}} 
+%\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth,keepaspectratio=true]{figures/01deg_jra55v13_ryf8485_spinup6_ACC_oceanspeed_0026-05-28-background.png}\par}} 
+%\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth, decodearray={0.1 1.6 0.1 1.6 0.1 1.6}, trim=10 0 0 25, clip, keepaspectratio=true]{figs/Amundsen-Bellingshausen_mld_01deg_jra55v140_iaf_cycle1_2017-01-16_200dpi.png}\par}}  % decodearray doesn't work in Acrobat
+\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth, trim=10 0 0 25, clip, keepaspectratio=true]{Amundsen-Bellingshausen_mld_01deg_jra55v140_iaf_cycle1_2017-01-16_200dpi-darker.png}\par}}  % decodearray doesn't work in Acrobat
+
+%\title[ACCESS-OM2 ocean-ice model: progress and plans\hspace{0.5\textwidth}\textbf{{\footnotesize\url{cosima.org.au}}}]
+\title%[ACCESS-OM2]
+{\textcolor{white}{{\LARGE\textbf{Southern Ocean sea ice\\ % and circulation\\ 
+in a global coupled ocean-sea ice model\\ at three resolutions}}}\vspace{3ex}}
+\author{\normalsize \textcolor{white}{\textbf{% identical to paper author list
+\textbf{Andrew~Kiss}~{\scriptsize (ANU)}, 
+Petra~Heil~{\scriptsize (AAPP,~UTas)},
+Paul~Sandery~{\scriptsize (CSIRO)},
+Will~Hobbs~{\scriptsize (AAPP,~UTas)},
+Andy~Hogg~{\scriptsize (ANU)},
+Hakase~Hayashida~{\scriptsize (UTas)},
+Ryan~Holmes~{\scriptsize (UNSW)},
+Abhishek~Savita~{\scriptsize (CSIRO,~UTas)}\\
+and many contributors
+from the COSIMA community, especially\\
+Nic~Hannah~{\scriptsize (Double Precision)},
+Russ~Fiedler~{\scriptsize (CSIRO)},
+Aidan~Heerdegen~{\scriptsize (ANU)},
+Angus~Gibson~{\scriptsize (ANU)},
+Marshall~Ward~{\scriptsize (GFDL)},
+Paul~Leopardi~{\scriptsize (NCI)}
+}\\
+\vspace{4ex}
+\colorbox{white}{
+\textcolor{black}{\textbf{ \href{http://cosima.org.au/}{cosima.org.au}}}\quad
+\includegraphics[height=.03\textwidth]{figures/logos/Australian-National-University.png}\quad
+\includegraphics[height=.03\textwidth]{figures/logos/unsw-logo.png}\quad
+\includegraphics[height=.03\textwidth]{figures/logos/UTAS-Colour-Stacked.png}\quad
+\includegraphics[height=.03\textwidth]{figures/logos/CSIRO_Logo.png}\quad
+\includegraphics[height=.03\textwidth]{figures/logos/aad_env_inline.png}\quad
+\includegraphics[height=.03\textwidth]{figures/logos/BOM_inline_black_300_41w.jpg}\quad
+\includegraphics[height=.03\textwidth]{figures/logos/NCI_3D_white-background_720P.jpg}}
+}\\
+\textcolor{white}{{\tiny This project is supported through funding from the Australian Government's Australian Antarctic Science Grant Program and ARC Linkage.}}}
+%\date{\today}
+\date{\textcolor{white}{AMOS Annual Conference, 8--12 Feb 2021}}
+
+\usetheme[width=0pt]{Marburg}
+%\usetheme{Rochester}
+%\usetheme{Dresden}
+\setbeamertemplate{navigation symbols}{} 
+
+%\rowcolors{1}{lightblue}{white}
+
+\begin{document}
+
+\frame{\titlepage}
+\usebackgroundtemplate{} 
+
+\newcommand{\multifig}[1]% #1=expt
+{
+\includegraphics<1>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-01_200dpi}%
+\includegraphics<2>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-02_200dpi}%
+\includegraphics<3>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-03_200dpi}%
+\includegraphics<4>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-04_200dpi}%
+\includegraphics<5>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-05_200dpi}%
+\includegraphics<6>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-06_200dpi}%
+\includegraphics<7>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-07_200dpi}%
+\includegraphics<8>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-08_200dpi}%
+\includegraphics<9>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-09_200dpi}%
+\includegraphics<10>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-10_200dpi}%
+\includegraphics<11>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-11_200dpi}%
+\includegraphics<12>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-12_200dpi}%
+\includegraphics<13>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-13_200dpi}%
+\includegraphics<14>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-14_200dpi}%
+\includegraphics<15>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-15_200dpi}%
+\includegraphics<16>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-16_200dpi}%
+\includegraphics<17>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-17_200dpi}%
+\includegraphics<18>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-18_200dpi}%
+\includegraphics<19>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-19_200dpi}%
+\includegraphics<20>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-20_200dpi}%
+\includegraphics<21>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-21_200dpi}%
+\includegraphics<22>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-22_200dpi}%
+}
+
+\frame{
+  \frametitle{COSIMA's global ocean-ice model configurations at \textbf{three resolutions}}
+\begin{minipage}[t]{0.32\textwidth}
+\textbf{ACCESS-OM2}\\[-3.5ex]
+{\small 
+\begin{itemize}
+\item not eddy-resolving
+\itemsep-0.25em 
+\item \textbf{1$^\circ$} horizontal grid\\[-1ex]
+\hspace{-2ex}{\tiny $360\times300$ cells, 24--111\,km}
+\item 50 $z^*$ levels\\[-1ex]
+\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
+\item fast and cheap\\[-1ex]
+\hspace{-2ex}{\tiny $\sim 24$min/yr, 0.1\,kCPU\,hr/yr\\[-1.3ex]on 252 PEs, dt=5400\,s}
+\item used in ACCESS-CM2
+%\item suits many-century\\ {experiments}
+\end{itemize}}
+\vspace{-1ex}%
+\multifig{1deg_jra55_iaf_omip2-fixed_cycle1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.32\textwidth}
+ \textbf{ACCESS-OM2-025}\\[-3.5ex]
+{\small
+\begin{itemize}
+\itemsep-0.25em 
+\item eddy ``permitting''
+\item \textbf{0.25$^\circ$} horizontal grid\\[-1ex]
+\hspace{-2ex}{\tiny $1440\times1080$ cells, 6.0--27.8\,km}
+\item 50 $z^*$ levels\\[-1ex]
+\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
+\item fairly fast, less cheap\\[-1ex]
+\hspace{-2ex}{\tiny 105\,min/yr, 4.5\,kCPU\,hr/yr\\[-1.3ex]on 1824 PEs, dt=1800\,s}
+%\item suits few-century\\ {experiments}
+\item for future ACCESS CM
+\end{itemize}}
+\vspace{-1ex}%
+\multifig{025deg_jra55_iaf_amoctopo_cycle1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.32\textwidth}
+\textbf{ACCESS-OM2-01}\\[-3.5ex]
+{\small 
+\begin{itemize}
+\itemsep-0.25em 
+\item eddy-rich
+\item \textbf{0.1$^\circ$} horizontal grid\\[-1ex]
+\hspace{-2ex}{\tiny $3600\times2700$ cells, 2.2--11.1\,km}
+\item 75  $z^*$ levels\\[-1ex]
+\hspace{-2ex}{\tiny $\Delta z=1.1$--198\,m}
+\item slow, expensive\\[-1ex]
+\hspace{-2ex}{\tiny 9\,hr/yr, 55--65\,kCPU\,hr/yr\\[-1.3ex]on 5096 PEs, dt=600\,s}
+%\item suits multi-decade\\ {experiments}
+\item in~Bluelink~OceanMAPS4
+\end{itemize}}
+\vspace{-1ex}%
+\multifig{01deg_jra55v140_iaf_cycle1}
+\end{minipage}%\\[2ex]
+}
+
+\frame{
+\frametitle{ACCESS-OM2 suite model components}
+\begin{minipage}[t]{0.4\textwidth}
+\vfill
+\includegraphics[width=\textwidth]{models-diagram/models-diagram-clip.pdf}
+\vfill
+\end{minipage}%
+\begin{minipage}[t]{0.6\textwidth}
+\textbf{Prescribed atmospheric forcing}
+\begin{itemize}
+\item JRA55-do~v1.4.0 reanalysis {\scriptsize (55\,km, 3-hourly)}
+\item this is the only component tied to observed interannual variations
+\item no feedback to atmosphere $\Rightarrow$ % (e.g.\ infinite atmospheric heat capacity)
+ atmospheric control of ice and ocean is stronger than in a coupled atmosphere-ice-ocean model %(e.g.\ ACCESS-CM2)
+\end{itemize}
+\textbf{Model improvements since v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}}
+\begin{itemize}
+\item  {\small relative winds for ice stress calculation}\\[-4ex]
+\item  {\small latitudinally-varying ocean albedo }\\[-4ex]
+\item {\small new JRA55-do version, extended to Jan 2019}\\[-4ex]
+\item  {\small improved topography at all resolutions}\\[-4ex]
+\item  {\small WOMBAT biogeochemistry support}\\[-4ex]
+\item  {\small improved speed and scalability at 0.1$^\circ$}\\[-4ex]
+\item  {\small bug fixes and configuration improvements, etc}
+\end{itemize}
+\end{minipage}
+}
+
+\frame{
+\frametitle{The model experiments}
+\begin{itemize}
+\item Runs used new configurations that are more consistent than in v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}\\[2ex]
+\item No data assimilation in sea ice or ocean models\\[2ex]
+\item Each resolution was run for \textbf{multiple 61-year cycles}
+\begin{itemize}
+\item Each cycle had 1 Jan 1958 -- 31 Dec 2018 JRA55-do v1.4 forcing
+\item Cycles differ only in their initial condition
+\begin{itemize}
+\item[\textbullet] {\small cycle 1 starts from observed climatology (World Ocean Atlas 2013 v2)}
+\item[\textbullet] {\small subsequent cycles start from final ocean \& ice state of previous cycle}\\[2ex]
+\end{itemize}
+\end{itemize}
+\item \textbf{ACCESS-OM2:} OMIP-2 experiment, \textbf{6 cycles} at 1$^\circ$ (Hakase Hayashida)%  \texttt{/scratch/v45/aek156/access-om2/archive/1deg_jra55_iaf_omip2-fixed_cycle*}
+\item \textbf{ACCESS-OM2-025:} OMIP-2 experiment, \textbf{6 cycles} at 0.25$^\circ$ (Ryan Holmes) % \texttt{/scratch/e14/rmh561/access-om2/archive/025deg_jra55_iaf_amoctopo_cycle*}
+\item \textbf{ACCESS-OM2-01:} \textbf{3 cycles} at 0.1$^\circ$\\[2ex] %\texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf}, \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf_cycle2}, \texttt{/scratch/x77/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3} and \texttt{/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3}
+%\item figure script: \url{https://github.com/aekiss/ice_analysis}
+%\item figure files: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
+\item All data will be made public (currently available by request)
+\end{itemize}
+}
+
+\frame{
+\frametitle{Timeseries of sea ice extent (area with $>15\%$ concentration), cycle \only<1>{1}\only<2>{2}\only<3>{3}\only<4>{4}\only<5>{5}\only<6>{6}}
+\includegraphics<1>[height=0.5\textheight,width=\textwidth]{figs/ice_extent_min_mean_max_all_cycle1.pdf}%
+\includegraphics<2>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle2.pdf}%
+\includegraphics<3>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle3.pdf}%
+\includegraphics<4>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle4.pdf}%
+\includegraphics<5>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle5.pdf}%
+\includegraphics<6>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle6.pdf}%
+\begin{itemize}
+\item 12-month running minimum, mean and maximum extent, compared to observational estimate (\href{https://nsidc.org/data/g02135}{NSIDC Sea Ice Index, v3; Fetterer et al.})
+\item Very close tracking of interannual variation in obs, due to data assimilation into JRA55-do reanalysis: \textbf{2016 Antarctic sea ice minimum is captured}
+\item Little dependence on cycle number, apart from initial few decades at 1$^\circ$ and 0.25$^\circ$
+\item Quantitative comparison is hampered by differing land masks
+\end{itemize}
+}
+
+\frame{
+\frametitle{ACCESS-OM2 outperforms most OMIP-2 models in March ice extent}
+ACCESS-OM2, all cycles \& res
+\hfill
+OMIP-2, mostly 1$^\circ$ (\href{https://doi.org/10.5194/gmd-13-3643-2020}{Tsujino et al., 2020})
+\hfill\phantom{x}
+\begin{minipage}[c]{0.35\textwidth}
+\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_03.pdf}\\[-1.1ex]
+\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_09.pdf}\\
+\end{minipage}%
+\begin{minipage}[c]{0.65\textwidth}
+\includegraphics[width=\textwidth]{TsujinoETAL2020a-fig22ghjk}\\
+\end{minipage}
+%\vspace{-6ex}
+{\small
+JRA55-do v1.4.0 forcing
+\hfill
+CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
+}
+
+
+\frame{
+\frametitle{1993--2017 mean annual cycle of sea ice extent}
+\includegraphics[width=\textwidth, trim=0 0 0 180, clip]{figs/ice_extent_seasonal_clim_cycle1.pdf}\\
+\hfill {\scriptsize Obs: NOAA/NSIDC G02135 Sea Ice Index v3 (Fetterer et al., 2017)}\\[2ex]
+\begin{itemize}
+\item modelled ice extent is slightly too low at minimum (Feb)
+\item very close to observed extent in March (although concentrations are too low)
+\item extent rises too quickly in Autumn and falls too slowly in Spring
+\end{itemize}
+}
+
+\newcommand{\monthlymean}{1993-2017_mean_month_}
+\newcommand{\years}{\monthlymean}
+%\newcommand{\years}{2016-2017}
+
+% these 3 commands are identical apart from bb
+\newcommand{\iceplot}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
+\includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+}
+\newcommand{\iceplotnocbar}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
+\includegraphics[width=#1, trim=45 90 45 7, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+}
+\newcommand{\icecbar}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
+\includegraphics[width=#1, trim=30 7 30 417, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+}
+
+
+\newcommand{\sicthreepanels}[6]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3, #6=date
+\frame{
+\hfill\iceplotnocbar[.32\textwidth]{#1}{#2}{#3}{#6}%
+\iceplotnocbar[.32\textwidth]{#1}{#2}{#4}{#6}%
+\iceplotnocbar[.32\textwidth]{#1}{#2}{#5}{#6}\hfill\phantom{\quad}\\
+\phantom{\quad}\hfill\icecbar{#1}{#2}{#3}{#6}\hfill\phantom{\quad}%
+}}
+
+\newcommand{\sicthreepanelsall}[5]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3
+\renewcommand{\years}{\monthlymean}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{01}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{02}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{03}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{04}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{05}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{06}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{07}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{08}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{09}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{10}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{11}
+\sicthreepanels{#1}{#2}{#3}{#4}{#5}{12}
+}
+
+
+%%\newcommand{\sicfourpanels}[7]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3, #6=experiment4, #7=date
+%\newcommand{\sicfourpanels}[8][.28\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment1, #5=experiment2, #6=experiment3, #7=experiment4, #8=date
+%\frame{
+%\hfill\iceplotnocbar[#1]{#2}{#3}{#4}{#8}%
+%\iceplotnocbar[#1]{#2}{#3}{#5}{#8}\hfill\phantom{\quad}\\
+%\hfill\iceplotnocbar[#1]{#2}{#3}{#6}{#8}%
+%\iceplotnocbar[#1]{#2}{#3}{#7}{#8}\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill\icecbar{#2}{#3}{#4}{#8}\hfill\phantom{\quad}%
+%}}
+
+\newcommand{\sicfourpanels}[9]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3, #6=experiment4, #7=date, #8=datestr, #9=title
+\frame{
+\frametitle{#9\\#8\phantom{y}}
+\vspace{-10ex}
+\begin{minipage}[c]{0.2\textwidth}
+\begin{flushright}
+\textbf{GIOMAS}\\
+{\small (DA model)}\\
+\vspace{5ex}
+\textbf{0.25$^\circ$}\\
+{\small ACCESS-OM2-025}
+\vspace{5ex}
+\end{flushright}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.58\textwidth}
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#3}{#7}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#4}{#7}\\
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#5}{#7}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#6}{#7}\\
+\phantom{\quad}\hfill\icecbar[0.8\textwidth]{#1}{#2}{#3}{#7}\hfill\phantom{\quad}%
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.2\textwidth}
+\begin{flushleft}
+\textbf{1$^\circ$}\\
+{\small ACCESS-OM2}\\
+\vspace{4ex}
+\textbf{0.1$^\circ$}\\
+{\small ACCESS-OM2-01}
+\vspace{7ex}
+\end{flushleft}
+\end{minipage}
+}}
+
+
+%\sicfourpanels{Amundsen-Bellingshausen}{aice}{025deg_jra55_iaf_amoctopo_cycle1}
+
+%\sicfourpanels{SH}{hi_m_mm}{GIOMAS}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{01}{1993--2017\\[-1ex]January mean}{SI thickness}
+%
+%
+%\end{document}
+
+\newcommand{\sicfourpanelsall}[6]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3, #6=experiment4
+\renewcommand{\years}{\monthlymean}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{01}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{02}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{03}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{04}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{05}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{06}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{07}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{08}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{09}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{10}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{11}
+%\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{12}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{01}{1993--2017\\[-1ex]January mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{02}{1993--2017\\[-1ex]February mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{03}{1993--2017\\[-1ex]March mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{04}{1993--2017\\[-1ex]April mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{05}{1993--2017\\[-1ex]May mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{06}{1993--2017\\[-1ex]June mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{07}{1993--2017\\[-1ex]July mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{08}{1993--2017\\[-1ex]August mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{09}{1993--2017\\[-1ex]September mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{10}{1993--2017\\[-1ex]October mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{11}{1993--2017\\[-1ex]November mean}{SI thickness}
+\sicfourpanels{#1}{#2}{#3}{#4}{#5}{#6}{12}{1993--2017\\[-1ex]December mean}{SI thickness}
+}
+
+\newcommand{\sicsixpanelsJRAcompare}[9][.32\textwidth]{% #1=width (optional), #2=view, #3=model view, var & experiment, #4-#8=JRAvars, #9=date
+\frame{
+\hfill%
+\includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#3_#9_200dpi.png}\hfill%
+\includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#2_#4_d_JRA55-do_#9_200dpi.png}\hfill%
+\includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#2_#5_d_JRA55-do_#9_200dpi.png}\hfill\phantom{x}%
+\\\hfill%
+\includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#2_#6_d_JRA55-do_#9_200dpi.png}\hfill%
+\includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#2_#7_d_JRA55-do_#9_200dpi.png}\hfill%
+\includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#2_#8_d_JRA55-do_#9_200dpi.png}\hfill\phantom{x}%
+}}
+
+\newcommand{\siccompare}[3]{% #1=view, #2=experiment, #3=date
+\frame{
+\iceplotnocbar{#1}{aice_m_mm}{#2}{#3}\hfill%
+\iceplotnocbar{#1}{aice}{obs}{#3}\\
+\phantom{\quad}\hfill\icecbar{#1}{aice_m_mm}{#2}{#3}\hfill\phantom{\quad}%
+}}
+
+%\newcommand{\siccomparefour}[5]{% #1=view, #2=experiment1, #3=experiment2, #4=experiment3, #5=date
+%\frame{
+%\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2}{#5}%
+%\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#3}{#5}\hfill\phantom{\quad}\\
+%\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#4}{#5}%
+%\iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#5}\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill\icecbar{#1}{aice_m_mm}{#2}{#5}\hfill\phantom{\quad}%
+%}}
+
+%\newcommand{\siccomparefour}[7]{% #1=view, #2=experiment1, #3=experiment2, #4=experiment3, #5=date, #6=datestr, #7=title
+%\frame{
+%\frametitle{#7\hfill #6}
+%
+%\vspace{-4ex}
+%\hfill NOAA passive microwave \iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#5}%
+%\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2}{#5} 1$^\circ$\hfill\phantom{\quad}\\
+%\hfill 0.25$^\circ$ \iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#3}{#5}%
+%\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#4}{#5} 0.1$^\circ$\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill\icecbar{#1}{aice_m_mm}{#2}{#5}\hfill\phantom{\quad}%
+%}}
+
+\newcommand{\siccomparefour}[7]{% #1=view, #2=experiment1, #3=experiment2, #4=experiment3, #5=date, #6=datestr, #7=title
+\frame{
+\frametitle{#7\\#6\phantom{y}}
+\vspace{-10ex}
+\begin{minipage}[c]{0.2\textwidth}
+\begin{flushright}
+\textbf{Observational estimate}\\
+{\small (NOAA passive microwave)}\\
+\vspace{5ex}
+\textbf{0.25$^\circ$}\\
+{\small ACCESS-OM2-025}
+\vspace{5ex}
+\end{flushright}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.58\textwidth}
+\iceplotnocbar[.49\textwidth]{#1}{aice}{obs}{#5}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{aice_m_mm}{#2}{#5}\\
+\iceplotnocbar[.49\textwidth]{#1}{aice_m_mm}{#3}{#5}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{aice_m_mm}{#4}{#5}\\
+\phantom{\quad}\hfill\icecbar[0.8\textwidth]{#1}{aice_m_mm}{#2}{#5}\hfill\phantom{\quad}%
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.2\textwidth}
+\begin{flushleft}
+\textbf{1$^\circ$}\\
+{\small ACCESS-OM2}\\
+\vspace{5ex}
+\textbf{0.1$^\circ$}\\
+{\small ACCESS-OM2-01}
+\vspace{5ex}
+\end{flushleft}
+\end{minipage}
+}}
+
+\newcommand{\siccomparethreecycles}[3]{% #1=view, #2=experiment, #3=date
+\frame{
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#3}%
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\phantom{\quad}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle2}{#3}%
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle3}{#3}\hfill\phantom{\quad}\\
+\phantom{\quad}\hfill\icecbar{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\phantom{\quad}%
+}}
+
+\newcommand{\siccomparethreecyclesdiff}[3]{% #1=view, #2=experiment, #3=date
+\frame{
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#3}%
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\phantom{\quad}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle2-cycle1}{#3}%
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle3-cycle1}{#3}\hfill\phantom{\quad}\\
+\icecbar{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\icecbar{#1}{aice_m_mm}{#2_cycle2-cycle1}{#3}
+%\hfill\phantom{\quad}%
+}}
+
+\newcommand{\siccomparefivecycles}[3]{% #1=view, #2=experiment, #3=date
+\frame{
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle2}{#3}\hfill\phantom{\quad}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle3}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle4}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle5}{#3}\hfill\phantom{\quad}\\
+%\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle6}{#3}\hfill\phantom{\quad}\\
+\phantom{\quad}\hfill\icecbar{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\phantom{\quad}%
+}}
+
+\newcommand{\siccomparefivecyclesdiff}[3]{% #1=view, #2=experiment, #3=date
+\frame{
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle2-cycle1}{#3}\hfill\phantom{\quad}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle3-cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle4-cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle5-cycle1}{#3}\hfill\phantom{\quad}\\
+%\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle6-cycle1}{#3}\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill
+\icecbar{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\icecbar{#1}{aice_m_mm}{#2_cycle2-cycle1}{#3}
+%\hfill\phantom{\quad}%
+}}
+
+\newcommand{\siccomparesixcycles}[3]{% #1=view, #2=experiment, #3=date
+\frame{
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle2}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle3}{#3}\hfill\phantom{\quad}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle4}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle5}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle6}{#3}\hfill\phantom{\quad}\\
+\phantom{\quad}\hfill\icecbar{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\phantom{\quad}%
+}}
+
+\newcommand{\siccomparesixcyclesdiff}[3]{% #1=view, #2=experiment, #3=date
+\frame{
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle2-cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle3-cycle1}{#3}\hfill\phantom{\quad}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle4-cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle5-cycle1}{#3}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{#2_cycle6-cycle1}{#3}\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill
+\icecbar{#1}{aice_m_mm}{#2_cycle1}{#3}\hfill\icecbar{#1}{aice_m_mm}{#2_cycle2-cycle1}{#3}
+%\hfill\phantom{\quad}%
+}}
+
+\newcommand{\siccompareall}[3]{% #1=view, #2=experiment, #3=cycle
+\renewcommand{\years}{\monthlymean}
+\siccompare{#1}{#2_cycle#3}{01}
+\siccompare{#1}{#2_cycle#3}{02}
+\siccompare{#1}{#2_cycle#3}{03}
+\siccompare{#1}{#2_cycle#3}{04}
+\siccompare{#1}{#2_cycle#3}{05}
+\siccompare{#1}{#2_cycle#3}{06}
+\siccompare{#1}{#2_cycle#3}{07}
+\siccompare{#1}{#2_cycle#3}{08}
+\siccompare{#1}{#2_cycle#3}{09}
+\siccompare{#1}{#2_cycle#3}{10}
+\siccompare{#1}{#2_cycle#3}{11}
+\siccompare{#1}{#2_cycle#3}{12}
+}
+
+%
+%\newcommand{\siccompareall}[3]{% #1=view, #2=experiment, #3=cycle
+%\siccompare{#1}{#2_cycle#3}{01}
+%\siccompare{#1}{#2_cycle#3}{02}
+%\siccompare{#1}{#2_cycle#3}{03}
+%\siccompare{#1}{#2_cycle#3}{04}
+%\siccompare{#1}{#2_cycle#3}{05}
+%\siccompare{#1}{#2_cycle#3}{06}
+%\siccompare{#1}{#2_cycle#3}{07}
+%\siccompare{#1}{#2_cycle#3}{08}
+%\siccompare{#1}{#2_cycle#3}{09}
+%\siccompare{#1}{#2_cycle#3}{10}
+%\siccompare{#1}{#2_cycle#3}{11}
+%\siccompare{#1}{#2_cycle#3}{12}
+%}
+
+\newcommand{\siccomparefourall}[4]{% #1=view, #2=experiment1, #3=experiment2, #4=experiment3
+\renewcommand{\years}{\monthlymean}
+\siccomparefour{#1}{#2}{#3}{#4}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{02}{1993--2017\\[-1ex]February mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{04}{1993--2017\\[-1ex]April mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{05}{1993--2017\\[-1ex]May mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{06}{1993--2017\\[-1ex]June mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{07}{1993--2017\\[-1ex]July mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{08}{1993--2017\\[-1ex]August mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{10}{1993--2017\\[-1ex]October mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{11}{1993--2017\\[-1ex]November mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{12}{1993--2017\\[-1ex]December mean}{SI concentration}
+}
+
+\newcommand{\siccomparethreecyclesdiffall}[3]{% #1=view, #2=experiment
+\renewcommand{\years}{\monthlymean}
+\siccomparethreecyclesdiff{#1}{#2}{01}
+\siccomparethreecyclesdiff{#1}{#2}{02}
+\siccomparethreecyclesdiff{#1}{#2}{03}
+\siccomparethreecyclesdiff{#1}{#2}{04}
+\siccomparethreecyclesdiff{#1}{#2}{05}
+\siccomparethreecyclesdiff{#1}{#2}{06}
+\siccomparethreecyclesdiff{#1}{#2}{07}
+\siccomparethreecyclesdiff{#1}{#2}{08}
+\siccomparethreecyclesdiff{#1}{#2}{09}
+\siccomparethreecyclesdiff{#1}{#2}{10}
+\siccomparethreecyclesdiff{#1}{#2}{11}
+\siccomparethreecyclesdiff{#1}{#2}{12}
+}
+
+\newcommand{\siccomparesixcyclesall}[3]{% #1=view, #2=experiment
+\renewcommand{\years}{\monthlymean}
+\siccomparesixcycles{#1}{#2}{01}
+\siccomparesixcycles{#1}{#2}{02}
+\siccomparesixcycles{#1}{#2}{03}
+\siccomparesixcycles{#1}{#2}{04}
+\siccomparesixcycles{#1}{#2}{05}
+\siccomparesixcycles{#1}{#2}{06}
+\siccomparesixcycles{#1}{#2}{07}
+\siccomparesixcycles{#1}{#2}{08}
+\siccomparesixcycles{#1}{#2}{09}
+\siccomparesixcycles{#1}{#2}{10}
+\siccomparesixcycles{#1}{#2}{11}
+\siccomparesixcycles{#1}{#2}{12}
+}
+
+\newcommand{\siccomparesixcyclesdiffall}[3]{% #1=view, #2=experiment
+\renewcommand{\years}{\monthlymean}
+\siccomparesixcyclesdiff{#1}{#2}{01}
+\siccomparesixcyclesdiff{#1}{#2}{02}
+\siccomparesixcyclesdiff{#1}{#2}{03}
+\siccomparesixcyclesdiff{#1}{#2}{04}
+\siccomparesixcyclesdiff{#1}{#2}{05}
+\siccomparesixcyclesdiff{#1}{#2}{06}
+\siccomparesixcyclesdiff{#1}{#2}{07}
+\siccomparesixcyclesdiff{#1}{#2}{08}
+\siccomparesixcyclesdiff{#1}{#2}{09}
+\siccomparesixcyclesdiff{#1}{#2}{10}
+\siccomparesixcyclesdiff{#1}{#2}{11}
+\siccomparesixcyclesdiff{#1}{#2}{12}
+}
+
+\newcommand{\siccomparefivecyclesdiffall}[3]{% #1=view, #2=experiment
+\renewcommand{\years}{\monthlymean}
+\siccomparefivecyclesdiff{#1}{#2}{01}
+\siccomparefivecyclesdiff{#1}{#2}{02}
+\siccomparefivecyclesdiff{#1}{#2}{03}
+\siccomparefivecyclesdiff{#1}{#2}{04}
+\siccomparefivecyclesdiff{#1}{#2}{05}
+\siccomparefivecyclesdiff{#1}{#2}{06}
+\siccomparefivecyclesdiff{#1}{#2}{07}
+\siccomparefivecyclesdiff{#1}{#2}{08}
+\siccomparefivecyclesdiff{#1}{#2}{09}
+\siccomparefivecyclesdiff{#1}{#2}{10}
+\siccomparefivecyclesdiff{#1}{#2}{11}
+\siccomparefivecyclesdiff{#1}{#2}{12}
+}
+
+
+%\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
+
+\siccomparefourall{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
+
+%\end{document}
+
+\frame{\frametitle{Example: daily sea ice concentration in Amundsen-Bellingshausen Sea}}
+
+\renewcommand{\years}{}
+
+%\newcommand{\sicfourpanelsAB}[8][.28\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment1, #5=experiment2, #6=experiment3, #7=experiment4, #8=date
+%\frame{
+%\hfill\iceplotnocbar[#1]{#2}{#3}{#4}{#8}%
+%\iceplotnocbar[#1]{#2}{#3}{#5}{#8}\hfill\phantom{\quad}\\
+%\hfill\iceplotnocbar[#1]{#2}{#3}{#6}{#8}%
+%\iceplotnocbar[#1]{#2}{#3}{#7}{#8}\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill\icecbar{#2}{#3}{#4}{#8}\hfill\phantom{\quad}%
+%}}
+
+\newcommand{\sicfourpanelsAB}[8]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3, #6=experiment4, #7=date, #8=title
+\frame{
+\frametitle{#8\\{\small #7}}
+\vspace{-7ex}
+\begin{minipage}[c]{0.09\textwidth}
+\begin{flushright}
+\textbf{Obs}\\
+%\textbf{Observational estimate}\\
+%{\small (NOAA passive microwave)}\\
+\vspace{5ex}
+\textbf{0.25$^\circ$}\\
+%{\small ACCESS-OM2-025}
+\vspace{5ex}
+\end{flushright}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.8\textwidth}
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#3}{#7}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#4}{#7}\\
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#5}{#7}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#6}{#7}\\
+\phantom{\quad}\hfill\icecbar[0.8\textwidth]{#1}{#2}{#3}{#7}\hfill\phantom{\quad}%
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.09\textwidth}
+\begin{flushleft}
+\textbf{1$^\circ$}\\
+%{\small ACCESS-OM2}\\
+\vspace{5ex}
+\textbf{0.1$^\circ$}\\
+%{\small ACCESS-OM2-01}
+\vspace{5ex}
+\end{flushleft}
+\end{minipage}
+}}
+
+
+\newcommand{\ABaice}[1]{% cycle 1 at 3 resolutions
+\sicfourpanelsAB{Amundsen-Bellingshausen}{aice}{obs}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{#1}{SIC}}
+\ABaice{2017-01-01}
+\ABaice{2017-01-02}
+\ABaice{2017-01-03}
+\ABaice{2017-01-04}
+\ABaice{2017-01-05}
+\ABaice{2017-01-06}
+\ABaice{2017-01-07}
+\ABaice{2017-01-08}
+\ABaice{2017-01-09}
+\ABaice{2017-01-10}
+\ABaice{2017-01-11}
+\ABaice{2017-01-12}
+\ABaice{2017-01-13}
+\ABaice{2017-01-14}
+\ABaice{2017-01-15}
+\ABaice{2017-01-16}
+\ABaice{2017-01-17}
+\ABaice{2017-01-18}
+\ABaice{2017-01-19}
+\ABaice{2017-01-20}
+\ABaice{2017-01-21}
+\ABaice{2017-01-22}
+
+\frame{\frametitle{3 cycles of the 0.1$^\circ$ experiment}}
+
+\newcommand{\sicfourpanelsABcyc}[8]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3, #6=experiment4, #7=date, #8=title
+\frame{
+\frametitle{#8\\{\small #7}}
+\vspace{-7ex}
+\begin{minipage}[c]{0.09\textwidth}
+\begin{flushright}
+\textbf{Obs}\\
+%\textbf{Observational estimate}\\
+%{\small (NOAA passive microwave)}\\
+\vspace{5ex}
+\textbf{Cycle~2}\\
+%{\small ACCESS-OM2-025}
+\vspace{5ex}
+\end{flushright}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.8\textwidth}
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#3}{#7}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#4}{#7}\\
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#5}{#7}\hfill%
+\iceplotnocbar[.49\textwidth]{#1}{#2}{#6}{#7}\\
+\phantom{\quad}\hfill\icecbar[0.8\textwidth]{#1}{#2}{#3}{#7}\hfill\phantom{\quad}%
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.09\textwidth}
+\begin{flushleft}
+\textbf{Cycle~1}\\
+%{\small ACCESS-OM2}\\
+\vspace{5ex}
+\textbf{Cycle~3}\\
+%{\small ACCESS-OM2-01}
+\vspace{5ex}
+\end{flushleft}
+\end{minipage}
+}}
+
+
+\renewcommand{\ABaice}[1]{% now look at 3 cycles of the 0.1deg
+%\sicfourpanels[.4\textwidth]{Amundsen-Bellingshausen}{aice}{obs}{01deg_jra55v140_iaf_cycle1}{01deg_jra55v140_iaf_cycle2}{01deg_jra55v140_iaf_cycle3}{#1}}
+\sicfourpanelsABcyc{Amundsen-Bellingshausen}{aice}{obs}{01deg_jra55v140_iaf_cycle1}{01deg_jra55v140_iaf_cycle2}{01deg_jra55v140_iaf_cycle3}{#1}{SIC}}
+\ABaice{2017-01-01}
+
+
+\ABaice{2017-01-02}
+\ABaice{2017-01-03}
+\ABaice{2017-01-04}
+\ABaice{2017-01-05}
+\ABaice{2017-01-06}
+\ABaice{2017-01-07}
+\ABaice{2017-01-08}
+\ABaice{2017-01-09}
+\ABaice{2017-01-10}
+\ABaice{2017-01-11}
+\ABaice{2017-01-12}
+\ABaice{2017-01-13}
+\ABaice{2017-01-14}
+\ABaice{2017-01-15}
+\ABaice{2017-01-16}
+\ABaice{2017-01-17}
+\ABaice{2017-01-18}
+\ABaice{2017-01-19}
+\ABaice{2017-01-20}
+\ABaice{2017-01-21}
+\ABaice{2017-01-22}
+\renewcommand{\years}{\monthlymean}
+
+\frame{
+\frametitle{Conclusions}
+\begin{itemize}
+\item New ACCESS-OM2 configurations, run for 366\,yr at 1$^\circ$ \& 0.25$^\circ$, 183\,yr at 0.1$^\circ$
+\item Sea ice extent slightly improved, and much less biased than many OMIP-2 models
+\item Resolution dependence is smaller than bias --- so parameter testing can be done at low resolution and benefit all resolutions
+\item Unclear whether bias is mainly due to model configuration or JRA55-do forcing
+\item Sea ice distribution is very similar in different cycles, indicating dominance by atmospheric forcing with little role for ocean variability
+%\item Common biases, independent of ocean state $\Rightarrow$ JRA55-do bias or poor model parameter choices?
+\item Data to be made publicly available soon
+\end{itemize}
+\textbf{Next steps}
+\begin{itemize}
+\item More detailed comparison to ice and ocean observations
+\item Investigate model parameter dependence to reduce model bias
+\end{itemize}
+}
+
+%\end{document}
+
+\frame{
+\frametitle{Extra slides}
+}
+
+\frame{
+\frametitle{Resolution dependence of thickness monthly climatology}
+%\begin{itemize}
+%\item Plots: 25-year 1993--2017 monthly thickness climatology for 1st cycle at 3 resolutions, compared to the \href{http://psc.apl.washington.edu/zhang/Global_seaice/model.html}{GIOMAS} model output (which assimilates satellite sea ice concentration and is forced by daily NCEP-NCAR reanalysis)
+%%\item \textbf{can someone recommend a gridded Antarctic sea ice thickness observational estimate I could use for comparison?}  e.g.\ GIOMAS? ICESat?
+%\item Resolution dependence is small, especially between 0.25$^\circ$ and 0.1$^\circ$
+%\item 1$^\circ$ extent and thickness are lower than at 0.25$^\circ$ and 0.1$^\circ$
+%\item Resolution dependence is stronger in summer than winter; in winter it seems largest in East Antarctic
+%\item Area covered by $>1.5$m thickness is much smaller in ACCESS-OM2 at all resolutions than in GIOMAS, especially in summer
+%\end{itemize}
+}
+
+\sicfourpanelsall{SH}{hi_m_mm}{GIOMAS}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
+
+%\sicthreepanelsall{SH}{hi_m_mm}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
+
+
+\frame{
+\frametitle{Timeseries of sea ice area, cycle \only<1>{1}\only<2>{2}\only<3>{3}\only<4>{4}\only<5>{5}\only<6>{6}}
+\includegraphics<1>[height=0.5\textheight,width=\textwidth]{figs/ice_area_min_mean_max_all_cycle1.pdf}%
+\includegraphics<2>[height=0.5\textheight,width=\textwidth]{figs/ice_area_min_mean_max_all_cycle2.pdf}%
+\includegraphics<3>[height=0.5\textheight,width=\textwidth]{figs/ice_area_min_mean_max_all_cycle3.pdf}%
+\includegraphics<4>[height=0.5\textheight,width=\textwidth]{figs/ice_area_min_mean_max_all_cycle4.pdf}%
+\includegraphics<5>[height=0.5\textheight,width=\textwidth]{figs/ice_area_min_mean_max_all_cycle5.pdf}%
+\includegraphics<6>[height=0.5\textheight,width=\textwidth]{figs/ice_area_min_mean_max_all_cycle6.pdf}%
+\begin{itemize}
+\item 12-month running minimum, mean and maximum area, compared to observational estimate (\href{https://nsidc.org/data/g02135}{NSIDC Sea Ice Index, v3; Fetterer et al.})
+\item Very close tracking of interannual variation in obs, due to data assimilation into JRA55-do reanalysis: \textbf{2016 Antarctic sea ice minimum is captured}
+\item Little dependence on cycle number, apart from initial few decades at 1$^\circ$ and 0.25$^\circ$
+\item Quantitative comparison is hampered by differing land masks
+\end{itemize}
+}
+
+\frame{
+\frametitle{Timeseries of sea ice volume, cycle \only<1>{1}\only<2>{2}\only<3>{3}\only<4>{4}\only<5>{5}\only<6>{6}}
+\includegraphics<1>[height=0.5\textheight,width=\textwidth]{figs/ice_volume_min_mean_max_all_cycle1.pdf}%
+\includegraphics<2>[height=0.5\textheight,width=\textwidth]{figs/ice_volume_min_mean_max_all_cycle2.pdf}%
+\includegraphics<3>[height=0.5\textheight,width=\textwidth]{figs/ice_volume_min_mean_max_all_cycle3.pdf}%
+\includegraphics<4>[height=0.5\textheight,width=\textwidth]{figs/ice_volume_min_mean_max_all_cycle4.pdf}%
+\includegraphics<5>[height=0.5\textheight,width=\textwidth]{figs/ice_volume_min_mean_max_all_cycle5.pdf}%
+\includegraphics<6>[height=0.5\textheight,width=\textwidth]{figs/ice_volume_min_mean_max_all_cycle6.pdf}%
+\begin{itemize}
+\item 12-month running minimum, mean and maximum volume
+\item Little dependence on cycle number, apart from initial few decades at 1$^\circ$ and 0.25$^\circ$
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{1993--2017 mean annual cycle of sea ice extent}
+\includegraphics[width=\textwidth]{figs/ice_extent_seasonal_clim_cycle1.pdf}\\
+{\scriptsize Obs: NOAA/NSIDC G02135 Sea Ice Index v3 (Fetterer et al., 2017)}
+}
+
+\frame{
+\frametitle{1993--2017 mean annual cycle of sea ice area}
+\includegraphics[width=\textwidth]{figs/ice_area_seasonal_clim_cycle1.pdf}\\
+{\scriptsize Obs: NOAA/NSIDC G02135 Sea Ice Index v3 (Fetterer et al., 2017)}
+}
+
+
+\frame{
+\frametitle{Data sources}
+\begin{itemize}
+%\item Runs used new configurations that are more consistent than in \href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ (2020)}
+%\item Each cycle had 61 years of JRA55-do v1.4 forcing, 1 Jan 1958 -- 31 Dec 2018
+%\item Cycle 1 initial cond.\ is WOA13 v2; for cycle $n>1$, IC is final state of cycle $n-1$ 
+\item ACCESS-OM2: Hakase's 6-cycle OMIP-2 run at 1$^\circ$ \texttt{/scratch/v45/aek156/access-om2/archive/1deg_jra55_iaf_omip2-fixed_cycle*}
+\item ACCESS-OM2-025: Ryan's 6-cycle OMIP-2 run at  0.25$^\circ$ \texttt{/scratch/e14/rmh561/access-om2/archive/025deg_jra55_iaf_amoctopo_cycle*}
+\item ACCESS-OM2-01: 3 cycles at 0.1$^\circ$ \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf}, \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf_cycle2}, \texttt{/scratch/x77/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3} and \texttt{/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3}
+\item this presentation: \url{https://www.dropbox.com/sh/mgb2x4texc5vbbg/AACGSnkaZ-1LdIfatLfBnLFSa}
+\item figure plotting script: \url{https://github.com/aekiss/ice_analysis}
+\item figure files: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
+\end{itemize}
+}
+
+\frame{
+\frametitle{Comparisons to JRA55-do forcing fields}
+}
+
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-01}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-02}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-03}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-04}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-05}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-06}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-07}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-08}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-09}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-10}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-11}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-12}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-13}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-14}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-15}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-16}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-17}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-18}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-19}
+\sicsixpanelsJRAcompare{Amundsen-BellingshausenSP}{Amundsen-Bellingshausen_aice_01deg_jra55v140_iaf_cycle1}{tas}{rlds}{rsds}{psl}{uas}{2017-01-20}
+
+
+\frame{
+\frametitle{SIC monthly climatology in different cycles}
+\begin{itemize}
+\item Plots: 25-year 1993--2017 monthly climatology for each cycle, and difference between cycle $n$ and cycle 1 (omitting cycle 6)
+\item Consider the cycles as an ensemble: identical configuration and forcing, differing only in initial condition and therefore in ocean state
+\item Differences between cycles are very small: atmospheric forcing is dominant and differing ocean conditions have a secondary role
+\item Difference between cycle 1 and 2 is usually the largest
+\item Difference pattern is very similar between cycles and resolutions, and often grows slightly through the first few cycles, in many cases slightly worsening the bias relative to obs --- probably reflects model drift
+\end{itemize}
+}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle2}{025deg_jra55_iaf_amoctopo_cycle2}{01deg_jra55v140_iaf_cycle2}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle3}{025deg_jra55_iaf_amoctopo_cycle3}{01deg_jra55v140_iaf_cycle3}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle4}{025deg_jra55_iaf_amoctopo_cycle4}{01deg_jra55v140_iaf_cycle3}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle5}{025deg_jra55_iaf_amoctopo_cycle5}{01deg_jra55v140_iaf_cycle3}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle6}{025deg_jra55_iaf_amoctopo_cycle6}{01deg_jra55v140_iaf_cycle3}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle2}{025deg_jra55_iaf_amoctopo_cycle2}{01deg_jra55v140_iaf_cycle2}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle3}{025deg_jra55_iaf_amoctopo_cycle3}{01deg_jra55v140_iaf_cycle3}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle4}{025deg_jra55_iaf_amoctopo_cycle4}{01deg_jra55v140_iaf_cycle3}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle5}{025deg_jra55_iaf_amoctopo_cycle5}{01deg_jra55v140_iaf_cycle3}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+
+\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle6}{025deg_jra55_iaf_amoctopo_cycle6}{01deg_jra55v140_iaf_cycle3}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+
+
+\siccomparefivecyclesdiff{SH}{1deg_jra55_iaf_omip2-fixed}{03}
+
+\siccomparefivecyclesdiff{SH}{025deg_jra55_iaf_amoctopo}{03}
+
+\siccomparethreecyclesdiff{SH}{01deg_jra55v140_iaf}{03}
+
+
+\siccomparefivecyclesdiff{SH}{1deg_jra55_iaf_omip2-fixed}{09}
+
+\siccomparefivecyclesdiff{SH}{025deg_jra55_iaf_amoctopo}{09}
+
+\siccomparethreecyclesdiff{SH}{01deg_jra55v140_iaf}{09}
+
+
+\frame{
+\frametitle{Arctic}
+}
+\siccomparefourall{NH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
+
+
+\frame{
+\frametitle{Thoughts and potential figures for AMOS 2021 presentation}
+last updated  \today\ \DTMcurrenttime ; \href{https://www.dropbox.com/sh/mgb2x4texc5vbbg/AACGSnkaZ-1LdIfatLfBnLFSa}{click \textbf{here} for latest version}
+\vfill
+This is a work in progress. I'm just sharing some figures and thoughts for my AMOS2021 presentation. If you have any suggestions, questions, or additional analyses to suggest/provide, let me know! \href{mailto:andrew.kiss@anu.edu.au}{andrew.kiss@anu.edu.au}
+\vfill
+\textbf{Abstract} (FYI):
+We will present an assessment of the Southern Ocean sea ice and ocean simulated by ACCESS-OM2 global coupled ocean - sea ice model configurations at 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$ resolution. We compare the model simulations to available observations and also discuss the ability of these models to represent sea ice trends, including the recent decline in Antarctic sea ice extent, and the extent to which improvements are obtained at increased horizontal resolution. We also use ensembles with identical JRA55-do atmospheric forcing but differing initial conditions to investigate the roles of ocean and atmospheric forcing on sea ice biases.
+}
+
+%\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{11}
+\frame{
+\frametitle{Resolution dependence of SIC monthly climatology}
+\begin{itemize}
+\item Plots: 25-year 1993--2017 monthly sea ice concentration climatology for 1st cycle at 3 resolutions and obs
+\item Obs: NOAA G02202 V3 passive microwave Goddard merged monthly data
+\item Scale is quadratic to emphasise differences at high concentration
+\item Model SIC is much too low at summer minimum (Feb), especially at 1$^\circ$; ice absent in East~Antarctic
+\item Autumn growth looks good, especially at 0.1$^\circ$
+\item Sept maximum SIC too low at 1$^\circ$; better at higher res but still a bit low in outer pack and too high near coast. Apparent coastal polynyas in obs are not seen at 0.1$^\circ$ (in fact the opposite, with high coastal SIC). Might be an observational bias, as mentioned in GMD paper (p433)?
+\item Spring decay too rapid
+\item Models agree better with each other than with obs: bias is mostly resolution-independent
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{Example: daily sea ice concentration in Amundsen-Bellingshausen Sea}
+Comparing the three resolutions
+\begin{itemize}
+\item Close agreement between different model resolutions, despite differing ocean states
+\item Ice is stirred by partially-resolved ocean eddy field at 0.1$^\circ$
+\item \ldots but models have only a weak resemblance to the microwave retrievals
+\item Common biases, independent of ocean state $\Rightarrow$ JRA55-do bias or poor model parameter choices?
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{Example: daily sea ice concentration in Amundsen-Bellingshausen Sea}
+Comparing 3 cycles of the 0.1$^\circ$ experiment
+\begin{itemize}
+\item Close agreement between different model cycles, despite differing ocean states
+\item Ice is stirred by partially-resolved ocean eddy field at 0.1$^\circ$
+\item \ldots but models have only a weak resemblance to the microwave retrievals
+\item Common biases, independent of ocean state $\Rightarrow$ JRA55-do bias or poor model parameter choices?
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{Resolution dependence of thickness monthly climatology}
+\begin{itemize}
+\item Plots: 25-year 1993--2017 monthly thickness climatology for 1st cycle at 3 resolutions, compared to the \href{http://psc.apl.washington.edu/zhang/Global_seaice/model.html}{GIOMAS} model output (which assimilates satellite sea ice concentration and is forced by daily NCEP-NCAR reanalysis)
+%\item \textbf{can someone recommend a gridded Antarctic sea ice thickness observational estimate I could use for comparison?}  e.g.\ GIOMAS? ICESat?
+\item Resolution dependence is small, especially between 0.25$^\circ$ and 0.1$^\circ$
+\item 1$^\circ$ extent and thickness are lower than at 0.25$^\circ$ and 0.1$^\circ$
+\item Resolution dependence is stronger in summer than winter; in winter it seems largest in East Antarctic
+\item Area covered by $>1.5$m thickness is much smaller in ACCESS-OM2 at all resolutions than in GIOMAS, especially in summer
+\end{itemize}
+}
+
+\frame{
+\frametitle{To do?}
+\begin{itemize}
+%\item include 15\% SIC contours on plots
+\item superimpose JRA data (wind vectors, isobars, isotherms)
+\item compare thickness with obs estimate, e.g.\ ICESat? --- see \url{https://earth.gsfc.nasa.gov/index.php/cryo/data/antarctic-sea-ice-thickness}
+%\item plot timeseries of extent and volume
+%\item plot mean annual cycle of extent
+\item plot SST biases
+%\item some nice daily snapshots showing the ice behaviour at different resolutions 
+\item analyses using daily data? e.g.\ thickness variance at different resolution?
+\item Taylor diagrams from Will?
+\item Plots focusing on 2016 sea ice event - timeseries and maps
+\item cf.\ \href{https://doi.org/10.5194/gmd-13-3643-2020}{Tsujino et al 2020} figs 4, 9, 22, 23 \& table 2. 
+Figs 9 \& 22 show a substantial difference between CORE and JRA55-do,  with JRA reducing (but not eliminating) the magnitude of the March low bias. The impact in Sept is less clear and depends on the model, but Fig 23 shows significantly improved Sept interannual variation with JRA.
+\item \textbf{any other suggestions?} e.g.\ diagnostics that would give dynamical insight?
+\end{itemize}
+}
+
+\end{document}
