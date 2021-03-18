@@ -1,3 +1,12 @@
+# latex auxiliary files
+*.aux
+*.nav
+*.out
+*.pdf
+*.snm
+*.synctex*
+*.toc
+
 ._*
 1deg_jra55_iaf_omip2-fixed.db
 1deg_jra55_iaf_omip2-fixed.db-journal

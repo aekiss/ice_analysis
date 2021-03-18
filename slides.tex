@@ -73,244 +73,12 @@
 \def\colorize<#1>{%
            \temporal<#1>{\color{black!25}}{\color{red!75!black}}{\color{black}}}
 
-%\usebackgroundtemplate{{\centering \includegraphics[width=\paperwidth,keepaspectratio=true]{figures/southern-ocean-faint.png}\par}} 
-%\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth,keepaspectratio=true]{figures/01deg_jra55v13_ryf8485_spinup6_ACC_oceanspeed_0026-05-28-background.png}\par}} 
-%\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth, decodearray={0.1 1.6 0.1 1.6 0.1 1.6}, trim=10 0 0 25, clip, keepaspectratio=true]{figs/Amundsen-Bellingshausen_mld_01deg_jra55v140_iaf_cycle1_2017-01-16_200dpi.png}\par}}  % decodearray doesn't work in Acrobat
-\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth, trim=10 0 0 25, clip, keepaspectratio=true]{Amundsen-Bellingshausen_mld_01deg_jra55v140_iaf_cycle1_2017-01-16_200dpi-darker.png}\par}}  % decodearray doesn't work in Acrobat
-
-%\title[ACCESS-OM2 ocean-ice model: progress and plans\hspace{0.5\textwidth}\textbf{{\footnotesize\url{cosima.org.au}}}]
-\title%[ACCESS-OM2]
-{\textcolor{white}{{\LARGE\textbf{Southern Ocean sea ice\\ % and circulation\\ 
-in a global coupled ocean-sea ice model\\ at three resolutions}}}\vspace{3ex}}
-\author{\normalsize \textcolor{white}{\textbf{% identical to paper author list
-\textbf{Andrew~Kiss}~{\scriptsize (ANU)}, 
-Petra~Heil~{\scriptsize (AAPP,~UTas)},
-Paul~Sandery~{\scriptsize (CSIRO)},
-Will~Hobbs~{\scriptsize (AAPP,~UTas)},
-Andy~Hogg~{\scriptsize (ANU)},
-Hakase~Hayashida~{\scriptsize (UTas)},
-Ryan~Holmes~{\scriptsize (UNSW)},
-Abhishek~Savita~{\scriptsize (CSIRO,~UTas)}\\
-and many contributors
-from the COSIMA community, especially\\
-Nic~Hannah~{\scriptsize (Double Precision)},
-Russ~Fiedler~{\scriptsize (CSIRO)},
-Aidan~Heerdegen~{\scriptsize (ANU)},
-Angus~Gibson~{\scriptsize (ANU)},
-Marshall~Ward~{\scriptsize (GFDL)},
-Paul~Leopardi~{\scriptsize (NCI)}
-}\\
-\vspace{4ex}
-\colorbox{white}{
-\textcolor{black}{\textbf{ \href{http://cosima.org.au/}{cosima.org.au}}}\quad
-\includegraphics[height=.03\textwidth]{figures/logos/Australian-National-University.png}\quad
-\includegraphics[height=.03\textwidth]{figures/logos/unsw-logo.png}\quad
-\includegraphics[height=.03\textwidth]{figures/logos/UTAS-Colour-Stacked.png}\quad
-\includegraphics[height=.03\textwidth]{figures/logos/CSIRO_Logo.png}\quad
-\includegraphics[height=.03\textwidth]{figures/logos/aad_env_inline.png}\quad
-\includegraphics[height=.03\textwidth]{figures/logos/BOM_inline_black_300_41w.jpg}\quad
-\includegraphics[height=.03\textwidth]{figures/logos/NCI_3D_white-background_720P.jpg}}
-}\\
-\textcolor{white}{{\tiny This project is supported through funding from the Australian Government's Australian Antarctic Science Grant Program and ARC Linkage.}}}
-%\date{\today}
-\date{\textcolor{white}{AMOS Annual Conference, 8--12 Feb 2021}}
-
-\usetheme[width=0pt]{Marburg}
-%\usetheme{Rochester}
-%\usetheme{Dresden}
-\setbeamertemplate{navigation symbols}{} 
-
-%\rowcolors{1}{lightblue}{white}
-
-\begin{document}
-
-\frame{\titlepage}
-\usebackgroundtemplate{} 
-
-\newcommand{\multifig}[1]% #1=expt
-{
-\includegraphics<1>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-01_200dpi}%
-\includegraphics<2>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-02_200dpi}%
-\includegraphics<3>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-03_200dpi}%
-\includegraphics<4>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-04_200dpi}%
-\includegraphics<5>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-05_200dpi}%
-\includegraphics<6>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-06_200dpi}%
-\includegraphics<7>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-07_200dpi}%
-\includegraphics<8>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-08_200dpi}%
-\includegraphics<9>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-09_200dpi}%
-\includegraphics<10>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-10_200dpi}%
-\includegraphics<11>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-11_200dpi}%
-\includegraphics<12>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-12_200dpi}%
-\includegraphics<13>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-13_200dpi}%
-\includegraphics<14>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-14_200dpi}%
-\includegraphics<15>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-15_200dpi}%
-\includegraphics<16>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-16_200dpi}%
-\includegraphics<17>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-17_200dpi}%
-\includegraphics<18>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-18_200dpi}%
-\includegraphics<19>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-19_200dpi}%
-\includegraphics<20>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-20_200dpi}%
-\includegraphics<21>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-21_200dpi}%
-\includegraphics<22>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-22_200dpi}%
-}
-
-\frame{
-  \frametitle{COSIMA's global ocean-ice model configurations at \textbf{three resolutions}}
-\begin{minipage}[t]{0.32\textwidth}
-\textbf{ACCESS-OM2}\\[-3.5ex]
-{\small 
-\begin{itemize}
-\item not eddy-resolving
-\itemsep-0.25em 
-\item \textbf{1$^\circ$} horizontal grid\\[-1ex]
-\hspace{-2ex}{\tiny $360\times300$ cells, 24--111\,km}
-\item 50 $z^*$ levels\\[-1ex]
-\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
-\item fast and cheap\\[-1ex]
-\hspace{-2ex}{\tiny $\sim 24$min/yr, 0.1\,kCPU\,hr/yr\\[-1.3ex]on 252 PEs, dt=5400\,s}
-\item used in ACCESS-CM2
-%\item suits many-century\\ {experiments}
-\end{itemize}}
-\vspace{-1ex}%
-\multifig{1deg_jra55_iaf_omip2-fixed_cycle1}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.32\textwidth}
- \textbf{ACCESS-OM2-025}\\[-3.5ex]
-{\small
-\begin{itemize}
-\itemsep-0.25em 
-\item eddy ``permitting''
-\item \textbf{0.25$^\circ$} horizontal grid\\[-1ex]
-\hspace{-2ex}{\tiny $1440\times1080$ cells, 6.0--27.8\,km}
-\item 50 $z^*$ levels\\[-1ex]
-\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
-\item fairly fast, less cheap\\[-1ex]
-\hspace{-2ex}{\tiny 105\,min/yr, 4.5\,kCPU\,hr/yr\\[-1.3ex]on 1824 PEs, dt=1800\,s}
-%\item suits few-century\\ {experiments}
-\item for future ACCESS CM
-\end{itemize}}
-\vspace{-1ex}%
-\multifig{025deg_jra55_iaf_amoctopo_cycle1}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.32\textwidth}
-\textbf{ACCESS-OM2-01}\\[-3.5ex]
-{\small 
-\begin{itemize}
-\itemsep-0.25em 
-\item eddy-rich
-\item \textbf{0.1$^\circ$} horizontal grid\\[-1ex]
-\hspace{-2ex}{\tiny $3600\times2700$ cells, 2.2--11.1\,km}
-\item 75  $z^*$ levels\\[-1ex]
-\hspace{-2ex}{\tiny $\Delta z=1.1$--198\,m}
-\item slow, expensive\\[-1ex]
-\hspace{-2ex}{\tiny 9\,hr/yr, 55--65\,kCPU\,hr/yr\\[-1.3ex]on 5096 PEs, dt=600\,s}
-%\item suits multi-decade\\ {experiments}
-\item in~Bluelink~OceanMAPS4
-\end{itemize}}
-\vspace{-1ex}%
-\multifig{01deg_jra55v140_iaf_cycle1}
-\end{minipage}%\\[2ex]
-}
-
-\frame{
-\frametitle{ACCESS-OM2 suite model components}
-\begin{minipage}[t]{0.4\textwidth}
-\vfill
-\includegraphics[width=\textwidth]{models-diagram/models-diagram-clip.pdf}
-\vfill
-\end{minipage}%
-\begin{minipage}[t]{0.6\textwidth}
-\textbf{Prescribed atmospheric forcing}
-\begin{itemize}
-\item JRA55-do~v1.4.0 reanalysis {\scriptsize (55\,km, 3-hourly)}
-\item this is the only component tied to observed interannual variations
-\item no feedback to atmosphere $\Rightarrow$ % (e.g.\ infinite atmospheric heat capacity)
- atmospheric control of ice and ocean is stronger than in a coupled atmosphere-ice-ocean model %(e.g.\ ACCESS-CM2)
-\end{itemize}
-\textbf{Model improvements since v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}}
-\begin{itemize}
-\item  {\small relative winds for ice stress calculation}\\[-4ex]
-\item  {\small latitudinally-varying ocean albedo }\\[-4ex]
-\item {\small new JRA55-do version, extended to Jan 2019}\\[-4ex]
-\item  {\small improved topography at all resolutions}\\[-4ex]
-\item  {\small WOMBAT biogeochemistry support}\\[-4ex]
-\item  {\small improved speed and scalability at 0.1$^\circ$}\\[-4ex]
-\item  {\small bug fixes and configuration improvements, etc}
-\end{itemize}
-\end{minipage}
-}
-
-\frame{
-\frametitle{The model experiments}
-\begin{itemize}
-\item Runs used new configurations that are more consistent than in v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}\\[2ex]
-\item No data assimilation in sea ice or ocean models\\[2ex]
-\item Each resolution was run for \textbf{multiple 61-year cycles}
-\begin{itemize}
-\item Each cycle had 1 Jan 1958 -- 31 Dec 2018 JRA55-do v1.4 forcing
-\item Cycles differ only in their initial condition
-\begin{itemize}
-\item[\textbullet] {\small cycle 1 starts from observed climatology (World Ocean Atlas 2013 v2)}
-\item[\textbullet] {\small subsequent cycles start from final ocean \& ice state of previous cycle}\\[2ex]
-\end{itemize}
-\end{itemize}
-\item \textbf{ACCESS-OM2:} OMIP-2 experiment, \textbf{6 cycles} at 1$^\circ$ (Hakase Hayashida)%  \texttt{/scratch/v45/aek156/access-om2/archive/1deg_jra55_iaf_omip2-fixed_cycle*}
-\item \textbf{ACCESS-OM2-025:} OMIP-2 experiment, \textbf{6 cycles} at 0.25$^\circ$ (Ryan Holmes) % \texttt{/scratch/e14/rmh561/access-om2/archive/025deg_jra55_iaf_amoctopo_cycle*}
-\item \textbf{ACCESS-OM2-01:} \textbf{3 cycles} at 0.1$^\circ$\\[2ex] %\texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf}, \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf_cycle2}, \texttt{/scratch/x77/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3} and \texttt{/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3}
-%\item figure script: \url{https://github.com/aekiss/ice_analysis}
-%\item figure files: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
-\item All data will be made public (currently available by request)
-\end{itemize}
-}
-
-\frame{
-\frametitle{Timeseries of sea ice extent (area with $>15\%$ concentration), cycle \only<1>{1}\only<2>{2}\only<3>{3}\only<4>{4}\only<5>{5}\only<6>{6}}
-\includegraphics<1>[height=0.5\textheight,width=\textwidth]{figs/ice_extent_min_mean_max_all_cycle1.pdf}%
-\includegraphics<2>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle2.pdf}%
-\includegraphics<3>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle3.pdf}%
-\includegraphics<4>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle4.pdf}%
-\includegraphics<5>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle5.pdf}%
-\includegraphics<6>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle6.pdf}%
-\begin{itemize}
-\item 12-month running minimum, mean and maximum extent, compared to observational estimate (\href{https://nsidc.org/data/g02135}{NSIDC Sea Ice Index, v3; Fetterer et al.})
-\item Very close tracking of interannual variation in obs, due to data assimilation into JRA55-do reanalysis: \textbf{2016 Antarctic sea ice minimum is captured}
-\item Little dependence on cycle number, apart from initial few decades at 1$^\circ$ and 0.25$^\circ$
-\item Quantitative comparison is hampered by differing land masks
-\end{itemize}
-}
-
-\frame{
-\frametitle{ACCESS-OM2 outperforms most OMIP-2 models in March ice extent}
-ACCESS-OM2, all cycles \& res
-\hfill
-OMIP-2, mostly 1$^\circ$ (\href{https://doi.org/10.5194/gmd-13-3643-2020}{Tsujino et al., 2020})
-\hfill\phantom{x}
-\begin{minipage}[c]{0.35\textwidth}
-\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_03.pdf}\\[-1.1ex]
-\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_09.pdf}\\
-\end{minipage}%
-\begin{minipage}[c]{0.65\textwidth}
-\includegraphics[width=\textwidth]{TsujinoETAL2020a-fig22ghjk}\\
-\end{minipage}
-%\vspace{-6ex}
-{\small
-JRA55-do v1.4.0 forcing
-\hfill
-CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
-}
 
 
-\frame{
-\frametitle{1993--2017 mean annual cycle of sea ice extent}
-\includegraphics[width=\textwidth, trim=0 0 0 180, clip]{figs/ice_extent_seasonal_clim_cycle1.pdf}\\
-\hfill {\scriptsize Obs: NOAA/NSIDC G02135 Sea Ice Index v3 (Fetterer et al., 2017)}\\[2ex]
-\begin{itemize}
-\item modelled ice extent is slightly too low at minimum (Feb)
-\item very close to observed extent in March (although concentrations are too low)
-\item extent rises too quickly in Autumn and falls too slowly in Spring
-\end{itemize}
-}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% commands for making slides with figures
 
 \newcommand{\monthlymean}{1993-2017_mean_month_}
 \newcommand{\years}{\monthlymean}
@@ -691,6 +459,407 @@ CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
 }
 
 
+% for perturbation experiments %%%%%%%%%%%%%%%%
+
+
+\newcommand{\sicsixpanelspertcompare}[9][.29\textwidth]{% #1=width (optional), #2=view, #3=model var & control, #4-#8=perturbations, #9=month
+\frame{
+\hfill%
+%SH_aice_m_mm_1deg_jra55_iaf_ensemble_turning_angle_9_-control_1993-2017_mean_month_12_200dpi
+\includegraphics[width=#1, trim=45 90 45 7, clip]{{figs/#2_aice_obs_1993-2017_mean_month_#9_200dpi}.png}\hfill% obs
+%\includegraphics[width=#1, trim=45 90 45 7, clip]{figs/#2_#3_1993-2017_mean_month_#9_200dpi.png}\hfill% control
+\includegraphics[width=#1, trim=45 90 45 7, clip]{{figs/#2_#3#4_1993-2017_mean_month_#9_200dpi}.png}\hfill%
+\includegraphics[width=#1, trim=45 90 45 7, clip]{{figs/#2_#3#5_1993-2017_mean_month_#9_200dpi}.png}\hfill\phantom{x}%
+\\\hfill%
+\includegraphics[width=#1, trim=45 90 45 7, clip]{{figs/#2_#3#6_1993-2017_mean_month_#9_200dpi}.png}\hfill%
+\includegraphics[width=#1, trim=45 90 45 7, clip]{{figs/#2_#3#7_1993-2017_mean_month_#9_200dpi}.png}\hfill%
+\includegraphics[width=#1, trim=45 90 45 7, clip]{{figs/#2_#3#8_1993-2017_mean_month_#9_200dpi}.png}\hfill\phantom{x}\\
+%\phantom{\quad}\hfill
+\includegraphics[width=.495\textwidth, trim=30 7 30 417, clip]{{figs/#2_#3#4_1993-2017_mean_month_#9_200dpi}.png}%
+\hfill\includegraphics[width=.495\textwidth, trim=30 7 30 417, clip]{{figs/#2_#3#8_1993-2017_mean_month_#9_200dpi}.png}%\phantom{\quad}%
+}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%\usebackgroundtemplate{{\centering \includegraphics[width=\paperwidth,keepaspectratio=true]{figures/southern-ocean-faint.png}\par}} 
+%\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth,keepaspectratio=true]{figures/01deg_jra55v13_ryf8485_spinup6_ACC_oceanspeed_0026-05-28-background.png}\par}} 
+%\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth, decodearray={0.1 1.6 0.1 1.6 0.1 1.6}, trim=10 0 0 25, clip, keepaspectratio=true]{figs/Amundsen-Bellingshausen_mld_01deg_jra55v140_iaf_cycle1_2017-01-16_200dpi.png}\par}}  % decodearray doesn't work in Acrobat
+%\usebackgroundtemplate{{\centering \includegraphics[width=1.2\textwidth, trim=10 0 0 25, clip, keepaspectratio=true]{Amundsen-Bellingshausen_mld_01deg_jra55v140_iaf_cycle1_2017-01-16_200dpi-darker.png}\par}}  % decodearray doesn't work in Acrobat
+
+%\title[ACCESS-OM2 ocean-ice model: progress and plans\hspace{0.5\textwidth}\textbf{{\footnotesize\url{cosima.org.au}}}]
+\title%[ACCESS-OM2]
+{\LARGE\textbf{ACCESS-OM2 sea ice analysis}}
+\author{Andrew Kiss\\
+\today\ \DTMcurrenttime\\[4ex]
+latest PDF: \url{https://www.dropbox.com/sh/co9ge6vnqzyjie1/AABXBvaKQhtSvWHA5tTWSfEpa}\\[2ex]
+latest source version: \url{https://github.com/aekiss/ice_analysis}\\[2ex]
+all figures: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
+}
+%\vspace{4ex}
+\date{}
+%\date{\textcolor{white}{AMOS Annual Conference, 8--12 Feb 2021}}
+
+\usetheme[width=0pt]{Marburg}
+%\usetheme{Rochester}
+%\usetheme{Dresden}
+\setbeamertemplate{navigation symbols}{} 
+
+%\rowcolors{1}{lightblue}{white}
+
+\begin{document}
+
+\frame{\titlepage}
+\usebackgroundtemplate{} 
+
+%\newcommand{\multifig}[1]% #1=expt
+%{
+%\includegraphics<1>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-01_200dpi}%
+%\includegraphics<2>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-02_200dpi}%
+%\includegraphics<3>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-03_200dpi}%
+%\includegraphics<4>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-04_200dpi}%
+%\includegraphics<5>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-05_200dpi}%
+%\includegraphics<6>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-06_200dpi}%
+%\includegraphics<7>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-07_200dpi}%
+%\includegraphics<8>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-08_200dpi}%
+%\includegraphics<9>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-09_200dpi}%
+%\includegraphics<10>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-10_200dpi}%
+%\includegraphics<11>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-11_200dpi}%
+%\includegraphics<12>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-12_200dpi}%
+%\includegraphics<13>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-13_200dpi}%
+%\includegraphics<14>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-14_200dpi}%
+%\includegraphics<15>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-15_200dpi}%
+%\includegraphics<16>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-16_200dpi}%
+%\includegraphics<17>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-17_200dpi}%
+%\includegraphics<18>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-18_200dpi}%
+%\includegraphics<19>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-19_200dpi}%
+%\includegraphics<20>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-20_200dpi}%
+%\includegraphics<21>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-21_200dpi}%
+%\includegraphics<22>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-22_200dpi}%
+%}
+%
+%\frame{
+%  \frametitle{COSIMA's global ocean-ice model configurations at \textbf{three resolutions}}
+%\begin{minipage}[t]{0.32\textwidth}
+%\textbf{ACCESS-OM2}\\[-3.5ex]
+%{\small 
+%\begin{itemize}
+%\item not eddy-resolving
+%\itemsep-0.25em 
+%\item \textbf{1$^\circ$} horizontal grid\\[-1ex]
+%\hspace{-2ex}{\tiny $360\times300$ cells, 24--111\,km}
+%\item 50 $z^*$ levels\\[-1ex]
+%\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
+%\item fast and cheap\\[-1ex]
+%\hspace{-2ex}{\tiny $\sim 24$min/yr, 0.1\,kCPU\,hr/yr\\[-1.3ex]on 252 PEs, dt=5400\,s}
+%\item used in ACCESS-CM2
+%%\item suits many-century\\ {experiments}
+%\end{itemize}}
+%\vspace{-1ex}%
+%\multifig{1deg_jra55_iaf_omip2-fixed_cycle1}
+%\end{minipage}
+%\hfill
+%\begin{minipage}[t]{0.32\textwidth}
+% \textbf{ACCESS-OM2-025}\\[-3.5ex]
+%{\small
+%\begin{itemize}
+%\itemsep-0.25em 
+%\item eddy ``permitting''
+%\item \textbf{0.25$^\circ$} horizontal grid\\[-1ex]
+%\hspace{-2ex}{\tiny $1440\times1080$ cells, 6.0--27.8\,km}
+%\item 50 $z^*$ levels\\[-1ex]
+%\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
+%\item fairly fast, less cheap\\[-1ex]
+%\hspace{-2ex}{\tiny 105\,min/yr, 4.5\,kCPU\,hr/yr\\[-1.3ex]on 1824 PEs, dt=1800\,s}
+%%\item suits few-century\\ {experiments}
+%\item for future ACCESS CM
+%\end{itemize}}
+%\vspace{-1ex}%
+%\multifig{025deg_jra55_iaf_amoctopo_cycle1}
+%\end{minipage}
+%\hfill
+%\begin{minipage}[t]{0.32\textwidth}
+%\textbf{ACCESS-OM2-01}\\[-3.5ex]
+%{\small 
+%\begin{itemize}
+%\itemsep-0.25em 
+%\item eddy-rich
+%\item \textbf{0.1$^\circ$} horizontal grid\\[-1ex]
+%\hspace{-2ex}{\tiny $3600\times2700$ cells, 2.2--11.1\,km}
+%\item 75  $z^*$ levels\\[-1ex]
+%\hspace{-2ex}{\tiny $\Delta z=1.1$--198\,m}
+%\item slow, expensive\\[-1ex]
+%\hspace{-2ex}{\tiny 9\,hr/yr, 55--65\,kCPU\,hr/yr\\[-1.3ex]on 5096 PEs, dt=600\,s}
+%%\item suits multi-decade\\ {experiments}
+%\item in~Bluelink~OceanMAPS4
+%\end{itemize}}
+%\vspace{-1ex}%
+%\multifig{01deg_jra55v140_iaf_cycle1}
+%\end{minipage}%\\[2ex]
+%}
+
+%\frame{
+%\frametitle{ACCESS-OM2 suite model components}
+%\begin{minipage}[t]{0.4\textwidth}
+%\vfill
+%\includegraphics[width=\textwidth]{models-diagram/models-diagram-clip.pdf}
+%\vfill
+%\end{minipage}%
+%\begin{minipage}[t]{0.6\textwidth}
+%\textbf{Prescribed atmospheric forcing}
+%\begin{itemize}
+%\item JRA55-do~v1.4.0 reanalysis {\scriptsize (55\,km, 3-hourly)}
+%\item this is the only component tied to observed interannual variations
+%\item no feedback to atmosphere $\Rightarrow$ % (e.g.\ infinite atmospheric heat capacity)
+% atmospheric control of ice and ocean is stronger than in a coupled atmosphere-ice-ocean model %(e.g.\ ACCESS-CM2)
+%\end{itemize}
+%\textbf{Model improvements since v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}}
+%\begin{itemize}
+%\item  {\small relative winds for ice stress calculation}\\[-4ex]
+%\item  {\small latitudinally-varying ocean albedo }\\[-4ex]
+%\item {\small new JRA55-do version, extended to Jan 2019}\\[-4ex]
+%\item  {\small improved topography at all resolutions}\\[-4ex]
+%\item  {\small WOMBAT biogeochemistry support}\\[-4ex]
+%\item  {\small improved speed and scalability at 0.1$^\circ$}\\[-4ex]
+%\item  {\small bug fixes and configuration improvements, etc}
+%\end{itemize}
+%\end{minipage}
+%}
+
+
+\frame{
+\frametitle{Parameter perturbations at 1$^\circ$}
+\begin{itemize}
+\item Perturbation experiments are in \texttt{/home/156/aek156/payu/param_ensemble/access-om2}
+\item The control configuration uses the same parameters as \url{https://github.com/COSIMA/1deg_jra55_iaf/tree/985eebd} (apart from diagnostics)
+\item The members of the perturbation ensemble are defined in \url{https://github.com/aekiss/ensemble/blob/1deg_param_ensemble/ensemble.yaml}
+\item Perturbations and control start from 1 January 1968 in the 3rd cycle of Hakase's OMIP2 experiment \texttt{/scratch/v45/hh0162/access-om2/control/1deg_jra55_iaf_omip2-fixed}, and run to the end of 2018 (51 years).
+\end{itemize}
+}
+
+\frame{
+\frametitle{turning_angle: parameterisation of unresolved Ekman layer}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_turning_angle.pdf}
+}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{01}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{03}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{05}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{07}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{09}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{11}
+\frame{
+\frametitle{turning_angle summary}
+\begin{itemize}
+\item Perturbation pattern changes only in amplitude as turning_angle increases
+\item Coastal SIC increases with turning_angle
+\item SIC decreases with turning_angle further offshore
+\item SIC increases with turning_angle in outermost region in spring
+\item Cancellation reduces signal in total area timeseries 
+\end{itemize}
+}
+
+\frame{
+\frametitle{mu_rdg: ridging parameter}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_mu_rdg.pdf}
+}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{01}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{03}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{05}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{07}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{09}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{11}
+\frame{
+\frametitle{mu_rdg summary}
+\begin{itemize}
+\item Perturbation pattern changes only in amplitude as mu_rdg increases
+\item Perturbation pattern has uniform sign in summer and early autumn, with larger (smaller) SIC for mu_rdg smaller (larger) than control value (3)
+\item Perturbation pattern is much weaker and more complex in other seasons; cancellation reduces signal in total area timeseries
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{chio: coefficient of ice-ocean heat flux}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_chio.pdf}
+}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{01}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{03}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{05}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{07}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{09}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{11}
+\frame{
+\frametitle{chio summary}
+\begin{itemize}
+\item Perturbation pattern changes only in amplitude as chio decreases
+\item Perturbation pattern has uniform sign in summer, with SIC increasing as chio decreases from control value (0.006)
+\item Perturbation pattern is weaker and more complex in other seasons; cancellation reduces signal in total area timeseries
+\item Except in summer, there are large areas in which SIC decreases slightly with decreasing chio. 
+From p53 of the CICE manual: 
+\textit{The net downward heat flux from the ice to the ocean is given by:
+$F_\text{bot} =-\rho_wc_wc_hu^{*}(T_w -T_f)$
+where $\rho_w$ is the density of seawater, $c_w$ is the specific heat of seawater, $c_h$ is a heat transfer coefficient [chio], $u^{*}$ is the friction velocity, and $T_w$ is the sea surface temperature.}
+$T_f$ is the freezing temperature.
+So the regions where SIC decreases with decreasing chio are presumably where $F_\text{bot}>0$ i.e.\ heat flows from ice to ocean, i.e.\ $T_w < T_f$.
+\end{itemize}
+}
+
+\frame{
+\frametitle{snowpatch: snow patchiness length scale}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_snowpatch.pdf}
+}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{01}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{03}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{05}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{07}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{09}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{11}
+\frame{
+\frametitle{snowpatch summary}
+\begin{itemize}
+\item snowpatch is used to determine the snow-covered area, which is then used to determine the total albedo from the area-weighted average of the ice and snow albedos. As snowpatch increases, the snow area decreases.
+\item Perturbation pattern changes only in amplitude as snowpatch decreases
+\item Perturbation pattern has uniform sign in summer and early autumn, with SIC increasing as snowpatch decreases from control value (0.02\,m), i.e.\ as snow albedo is weighted more strongly
+\item Perturbation pattern is much weaker and more complex in other seasons; cancellation reduces signal in total area timeseries. 
+\item Presumably snowpatch's effect on the visible albedo is unimportant in the polar night relative to its effect on IR albedo
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{albicev: ice visible albedo}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_albicev.pdf}
+}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{01}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{03}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{05}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{07}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{09}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{11}
+\frame{
+\frametitle{albicev summary}
+\begin{itemize}
+\item Perturbation pattern changes only in amplitude as albicev decreases
+\item Perturbation pattern has uniform sign in summer and early autumn, with SIC decreasing (increasing) for albicev smaller (larger) than control value (0.86)
+\item Perturbation pattern is more complex in other seasons, but the effect of albicev is small in the polar night; cancellation reduces signal in total area timeseries. 
+\end{itemize}
+}
+
+\frame{
+\frametitle{albicei: ice infrared albedo}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_albicei.pdf}
+}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{01}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{03}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{05}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{07}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{09}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{11}
+\frame{
+\frametitle{albicei summary}
+\begin{itemize}
+\item Perturbation pattern changes only in amplitude as albicei decreases
+\item Perturbation pattern has uniform sign in summer and early autumn, with SIC decreasing (increasing) for albicei smaller (larger) than control value (0.44)
+\item Perturbation pattern is more complex in other seasons, but the effect of albicei is small in the polar night; cancellation reduces signal in total area timeseries. 
+\end{itemize}
+}
+
+\frame{
+\frametitle{dragio: ice-ocean drag coefficient}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_dragio.pdf}
+}
+\frame{
+\frametitle{ndte: number of elastic sub-timesteps}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_ndte.pdf}
+}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{01}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{03}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{05}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{07}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{09}
+\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{11}
+\frame{
+\frametitle{dragio and ndte summary}
+\begin{itemize}
+\item Reducing dragio from its control value (0.00536) generally decreases SIC in summer and autumn; patterns are more complex in other seasons, with cancellation between positive and negative regions
+\item Doubling ndte from its control value (120) has greatest effect in summer, where it increases SIC. It has little effect in other seasons except for patchy changes in the MIZ. This generally weak dependence on ndte indicates near-convergence of the EVP solver.
+\end{itemize}
+}
+
+\end{document}
+
+\frame{
+\frametitle{The model experiments}
+\begin{itemize}
+\item Runs used new configurations that are more consistent than in v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}\\[2ex]
+\item No data assimilation in sea ice or ocean models\\[2ex]
+\item Each resolution was run for \textbf{multiple 61-year cycles}
+\begin{itemize}
+\item Each cycle had 1 Jan 1958 -- 31 Dec 2018 JRA55-do v1.4 forcing
+\item Cycles differ only in their initial condition
+\begin{itemize}
+\item[\textbullet] {\small cycle 1 starts from observed climatology (World Ocean Atlas 2013 v2)}
+\item[\textbullet] {\small subsequent cycles start from final ocean \& ice state of previous cycle}\\[2ex]
+\end{itemize}
+\end{itemize}
+\item \textbf{ACCESS-OM2:} OMIP-2 experiment, \textbf{6 cycles} at 1$^\circ$ (Hakase Hayashida)%  \texttt{/scratch/v45/aek156/access-om2/archive/1deg_jra55_iaf_omip2-fixed_cycle*}
+\item \textbf{ACCESS-OM2-025:} OMIP-2 experiment, \textbf{6 cycles} at 0.25$^\circ$ (Ryan Holmes) % \texttt{/scratch/e14/rmh561/access-om2/archive/025deg_jra55_iaf_amoctopo_cycle*}
+\item \textbf{ACCESS-OM2-01:} \textbf{3 cycles} at 0.1$^\circ$\\[2ex] %\texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf}, \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf_cycle2}, \texttt{/scratch/x77/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3} and \texttt{/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3}
+%\item figure script: \url{https://github.com/aekiss/ice_analysis}
+%\item figure files: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
+\item All data will be made public (currently available by request)
+\end{itemize}
+}
+
+\frame{
+\frametitle{Timeseries of sea ice extent (area with $>15\%$ concentration), cycle \only<1>{1}\only<2>{2}\only<3>{3}\only<4>{4}\only<5>{5}\only<6>{6}}
+\includegraphics<1>[height=0.5\textheight,width=\textwidth]{figs/ice_extent_min_mean_max_all_cycle1.pdf}%
+\includegraphics<2>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle2.pdf}%
+\includegraphics<3>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle3.pdf}%
+\includegraphics<4>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle4.pdf}%
+\includegraphics<5>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle5.pdf}%
+\includegraphics<6>[height=0.5\textheight,width=.978\textwidth]{figs/ice_extent_min_mean_max_all_cycle6.pdf}%
+\begin{itemize}
+\item 12-month running minimum, mean and maximum extent, compared to observational estimate (\href{https://nsidc.org/data/g02135}{NSIDC Sea Ice Index, v3; Fetterer et al.})
+\item Very close tracking of interannual variation in obs, due to data assimilation into JRA55-do reanalysis: \textbf{2016 Antarctic sea ice minimum is captured}
+\item Little dependence on cycle number, apart from initial few decades at 1$^\circ$ and 0.25$^\circ$
+\item Quantitative comparison is hampered by differing land masks
+\end{itemize}
+}
+
+%\frame{
+%\frametitle{ACCESS-OM2 outperforms most OMIP-2 models in March ice extent}
+%ACCESS-OM2, all cycles \& res
+%\hfill
+%OMIP-2, mostly 1$^\circ$ (\href{https://doi.org/10.5194/gmd-13-3643-2020}{Tsujino et al., 2020})
+%\hfill\phantom{x}
+%\begin{minipage}[c]{0.35\textwidth}
+%\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_03.pdf}\\[-1.1ex]
+%\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_09.pdf}\\
+%\end{minipage}%
+%\begin{minipage}[c]{0.65\textwidth}
+%\includegraphics[width=\textwidth]{TsujinoETAL2020a-fig22ghjk}\\
+%\end{minipage}
+%%\vspace{-6ex}
+%{\small
+%JRA55-do v1.4.0 forcing
+%\hfill
+%CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
+%}
+
+
+\frame{
+\frametitle{1993--2017 mean annual cycle of sea ice extent}
+\includegraphics[width=\textwidth, trim=0 0 0 180, clip]{figs/ice_extent_seasonal_clim_cycle1.pdf}\\
+\hfill {\scriptsize Obs: NOAA/NSIDC G02135 Sea Ice Index v3 (Fetterer et al., 2017)}\\[2ex]
+\begin{itemize}
+\item modelled ice extent is slightly too low at minimum (Feb)
+\item very close to observed extent in March (although concentrations are too low)
+\item extent rises too quickly in Autumn and falls too slowly in Spring
+\end{itemize}
+}
+
 %\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
 
 \siccomparefourall{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
@@ -934,9 +1103,8 @@ CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
 \item ACCESS-OM2: Hakase's 6-cycle OMIP-2 run at 1$^\circ$ \texttt{/scratch/v45/aek156/access-om2/archive/1deg_jra55_iaf_omip2-fixed_cycle*}
 \item ACCESS-OM2-025: Ryan's 6-cycle OMIP-2 run at  0.25$^\circ$ \texttt{/scratch/e14/rmh561/access-om2/archive/025deg_jra55_iaf_amoctopo_cycle*}
 \item ACCESS-OM2-01: 3 cycles at 0.1$^\circ$ \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf}, \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf_cycle2}, \texttt{/scratch/x77/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3} and \texttt{/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3}
-\item this presentation: \url{https://www.dropbox.com/sh/mgb2x4texc5vbbg/AACGSnkaZ-1LdIfatLfBnLFSa}
-\item figure plotting script: \url{https://github.com/aekiss/ice_analysis}
-\item figure files: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
+\item Perturbation experiments: \texttt{/home/156/aek156/payu/param_ensemble}
+\item Perturbation ensemble: \url{https://github.com/aekiss/ensemble/blob/1deg_param_ensemble/ensemble.yaml}
 \end{itemize}
 }
 
@@ -1021,17 +1189,6 @@ CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
 \frametitle{Arctic}
 }
 \siccomparefourall{NH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
-
-
-\frame{
-\frametitle{Thoughts and potential figures for AMOS 2021 presentation}
-last updated  \today\ \DTMcurrenttime ; \href{https://www.dropbox.com/sh/mgb2x4texc5vbbg/AACGSnkaZ-1LdIfatLfBnLFSa}{click \textbf{here} for latest version}
-\vfill
-This is a work in progress. I'm just sharing some figures and thoughts for my AMOS2021 presentation. If you have any suggestions, questions, or additional analyses to suggest/provide, let me know! \href{mailto:andrew.kiss@anu.edu.au}{andrew.kiss@anu.edu.au}
-\vfill
-\textbf{Abstract} (FYI):
-We will present an assessment of the Southern Ocean sea ice and ocean simulated by ACCESS-OM2 global coupled ocean - sea ice model configurations at 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$ resolution. We compare the model simulations to available observations and also discuss the ability of these models to represent sea ice trends, including the recent decline in Antarctic sea ice extent, and the extent to which improvements are obtained at increased horizontal resolution. We also use ensembles with identical JRA55-do atmospheric forcing but differing initial conditions to investigate the roles of ocean and atmospheric forcing on sea ice biases.
-}
 
 %\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{11}
 \frame{
