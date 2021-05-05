@@ -56,7 +56,8 @@ exptdict = OrderedDict([
                 'time_units': 'days since 1718-01-01',
                 'offset': -87658,
                 'gridpaths': ['/g/data/ik11/grids/ocean_grid_10.nc'],
-                'cycles': 6
+                'cycles': 6,
+                'res': '1°'
                }),
     ('025deg', {'model': 'access-om2-025',
                 'expt': '025deg_jra55_iaf_omip2_cycle', # cycle number appended below
@@ -69,7 +70,8 @@ exptdict = OrderedDict([
                 'time_units': 'days since 1718-01-01',
                 'offset': -87658,
                 'gridpaths': ['/g/data/ik11/grids/ocean_grid_025.nc'],
-                'cycles': 6
+                'cycles': 6,
+                'res': '0.25°'
                }),
     ('01deg',  {'model': 'access-om2-01',
                 'expt': '01deg_jra55v140_iaf',
@@ -80,7 +82,8 @@ exptdict = OrderedDict([
                 'time_units': 'days since 0001-01-01',
                 'offset': None,
                 'gridpaths': ['/g/data/ik11/grids/ocean_grid_01.nc', '/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf/output000/ocean/ocean-2d-area_t.nc'],
-                'cycles': 3
+                'cycles': 3,
+                'res': '0.1°'
                }),
 # These are the older version 1 results, as used in Kiss et al 2020
     ('1degv1',   {'model': 'access-om2',
@@ -89,26 +92,32 @@ exptdict = OrderedDict([
                 'n_files': -12,
                 'time_units': 'days since 1718-01-01',
                 'offset': -87658,
-                'gridpaths': ['/g/data/ik11/grids/ocean_grid_10.nc']}),
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_10.nc'],
+                'res': '1°'
+                }),
     ('025degv1', {'model': 'access-om2-025',
                 'expt': '025deg_jra55v13_iaf_gmredi6',
                 'desc': 'ACCESS-OM2-025 v1',
                 'n_files': -34,
                 'time_units': 'days since 1718-01-01',
                 'offset': -87658,
-                'gridpaths': ['/g/data/ik11/grids/ocean_grid_025.nc']}),
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_025.nc'],
+                'res': '0.25°'
+                 }),
     ('01degv1',  {'model':'access-om2-01',
                 'expt': '01deg_jra55v13_iaf',
                 'desc': 'ACCESS-OM2-01 v1',
                 'n_files': None,
                 'time_units': 'days since 0001-01-01',
                 'offset': None,
-                'gridpaths': ['/g/data/ik11/grids/ocean_grid_01.nc', '/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf/output000/ocean/ocean-2d-area_t.nc']})
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_01.nc', '/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf/output000/ocean/ocean-2d-area_t.nc'],
+                'res': '0.1°'
+                 })
 ])
 
-
 # add parameter ensembles
-for res in ['1deg']:
+allparams = dict()
+for res in ['1deg', '025deg']:
     ens_dirs = glob.glob('/scratch/jk72/aek156/access-om2/archive/'+res+'*')
     ens_dirs.sort()
     template = os.path.basename(os.path.commonprefix(ens_dirs))
@@ -130,6 +139,7 @@ for res in ['1deg']:
         if res == '1deg':
             exptdict[ekey].update({
                 'model': 'access-om2',
+                'res': '1°',
                 'exptdir': '/scratch/jk72/aek156/access-om2/archive/' + f,
                 'gridpaths': ['/g/data/ik11/grids/ocean_grid_10.nc'],
                 'ensemble': '/home/156/aek156/payu/param_ensemble/access-om2/ensemble/ensemble.yaml'
@@ -137,11 +147,19 @@ for res in ['1deg']:
         elif res == '025deg':
             exptdict[ekey].update({
                 'model': 'access-om2-025',
-                'exptdir': '/scratch/jk72/aek156/access-om2-025/archive/' + f,
+                'res': '0.25°',
+                'exptdir': '/scratch/jk72/aek156/access-om2/archive/' + f,
                 'gridpaths': ['/g/data/ik11/grids/ocean_grid_025.nc'],
                 'ensemble': '/home/156/aek156/payu/param_ensemble/access-om2-025/ensemble/ensemble.yaml'
                 })
-# TODO: support for 0.1deg
+        elif res == '01deg':
+            exptdict[ekey].update({
+                'model': 'access-om2-01',
+                'res': '0.1°',
+                'exptdir': '/scratch/jk72/aek156/access-om2/archive/' + f,
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_01.nc'],
+                'ensemble': '/home/156/aek156/payu/param_ensemble/access-om2-01/ensemble/ensemble.yaml'
+                })
 
         if f == template:
             exptdict[ekey]['desc'] = exptdict[ekey]['desc'].replace('=', ' ')
@@ -159,7 +177,7 @@ for res in ['1deg']:
 
 
 # For each experiment, record the values of all parameters that are perturbed in any ensemble member
-        exptdict[ekey]['params'] = dict()
+        exptdict[ekey]['params'] = dict()  # shared among all ensemble members at all resolutions
         ensemble = yaml.load(open(exptdict[ekey]['ensemble'], 'r'), Loader=yaml.SafeLoader)
         for fname, nmls in ensemble['namelists'].items():
             fpath = os.path.join(outputpaths[-1], fname)
@@ -170,7 +188,8 @@ for res in ['1deg']:
             templatenml = f90nml.read(os.path.join(os.path.dirname(exptdict[ekey]['ensemble']), ensemble['template'], fname))
             for group, names in nmls.items():
                 for name in names:
-                    turningangle = set([fname, group, name]) == set(['ice/cice_in.nml', 'dynamics_nml', 'turning_angle'])
+#                     turningangle = set([fname, group, name]) == set(['ice/cice_in.nml', 'dynamics_nml', 'turning_angle'])
+                    turningangle = [fname, group, name] == ['ice/cice_in.nml', 'dynamics_nml', 'turning_angle']
                     if turningangle:
                         exptdict[ekey]['params']['turning_angle'] = np.arcsin(nml[group]['sinw']) * 180. / np.pi
                     else:
@@ -178,6 +197,23 @@ for res in ['1deg']:
                             exptdict[ekey]['params'][name] = nml[group][name]
                         except KeyError:  # fill in from template - ASSUMES TEMPLATE VALUE IS WHAT WAS USED!
                             exptdict[ekey]['params'][name] = templatenml[group][name]
+        allparams.update(exptdict[ekey]['params'])
+
+# fill in parameter values from ensembles at other resolutions so params has the same keys for all experiments
+for ide in exptdict.values():
+    if 'params' in ide:
+        for param, val in allparams.items():
+            if param not in ide['params']:
+                ide['params'][param] = val
+
+# change to chio value 0.006 actually used - see chio bug: https://github.com/COSIMA/cice5/issues/55
+for ekey, ide in exptdict.items():
+    if 'perturbed' in ide:
+        if ide['perturbed'] != 'chio':
+            if 'chio' in ide['params']:
+                if ide['params']['chio'] == 0.004:
+                    ide['params']['chio'] = 0.006
+                    print('set chio=0.006 in', ekey)
 
 
 # Add sessions where they don't already exist.
