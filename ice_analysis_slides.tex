@@ -7,6 +7,7 @@
   \usebeamertemplate{itemize item}}
 \usepackage[strings]{underscore} % allows hyphenation at underscores
 \usepackage{datetime2}\DTMsetdatestyle{iso}
+\usepackage{pgffor}
 
 %\usepackage{ifthen}
 %\newboolean{movies}\setboolean{movies}{true} % whether to embed movies - MAY NEED TO RUN TWICE!
@@ -80,19 +81,40 @@
 
 % commands for making slides with figures
 
+\newcommand{\pwidth}{0.495\textwidth}
+\newcommand{\plotter}{}
+
 \newcommand{\monthlymean}{1993-2017_mean_month_}
 \newcommand{\years}{\monthlymean}
 %\newcommand{\years}{2016-2017}
+
+\newcommand{\plotnocbar}[2][.495\textwidth]{% #1=width (optional), #2=file
+\includegraphics[width=#1, trim=45 90 45 7, clip]{#2}
+}
+
+\newcommand{\cbar}[2][.495\textwidth]{% #1=width (optional), #2=file
+\includegraphics[width=#1, trim=30 7 30 417, clip]{#2}
+}
+
+\newcommand{\cbarrot}[2][.495\textwidth]{% #1=width (optional), #2=file
+\includegraphics[width=#1, trim=30 7 30 417, clip, angle=90]{#2}
+}
 
 % these 3 commands are identical apart from bb
 \newcommand{\iceplot}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
 \includegraphics[width=#1, trim=45 9 45 7, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
 }
 \newcommand{\iceplotnocbar}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
-\includegraphics[width=#1, trim=45 90 45 7, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+%\includegraphics[width=#1, trim=45 90 45 7, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+\plotnocbar[#1]{figs/#2_#3_#4_\years #5_200dpi.png}
 }
 \newcommand{\icecbar}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
-\includegraphics[width=#1, trim=30 7 30 417, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+%\includegraphics[width=#1, trim=30 7 30 417, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+\cbar[#1]{figs/#2_#3_#4_\years #5_200dpi.png}
+}
+\newcommand{\icecbarrot}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
+%\includegraphics[width=#1, trim=30 7 30 417, clip, angle=90]{figs/#2_#3_#4_\years #5_200dpi.png}
+\cbarrot[#1]{figs/#2_#3_#4_\years #5_200dpi.png}
 }
 
 
@@ -378,21 +400,7 @@
 %\siccompare{#1}{#2_cycle#3}{12}
 %}
 
-\newcommand{\siccomparefourall}[4]{% #1=view, #2=experiment1, #3=experiment2, #4=experiment3
-\renewcommand{\years}{\monthlymean}
-\siccomparefour{#1}{#2}{#3}{#4}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{02}{1993--2017\\[-1ex]February mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{04}{1993--2017\\[-1ex]April mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{05}{1993--2017\\[-1ex]May mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{06}{1993--2017\\[-1ex]June mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{07}{1993--2017\\[-1ex]July mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{08}{1993--2017\\[-1ex]August mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{10}{1993--2017\\[-1ex]October mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{11}{1993--2017\\[-1ex]November mean}{SI concentration}
-\siccomparefour{#1}{#2}{#3}{#4}{12}{1993--2017\\[-1ex]December mean}{SI concentration}
-}
+
 
 \newcommand{\siccomparethreecyclesdiffall}[3]{% #1=view, #2=experiment
 \renewcommand{\years}{\monthlymean}
@@ -481,6 +489,43 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newcommand{\sicobssixpanels}[2]{% #1=view, #2=date
+\frame{
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{siconc}{mm}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{siconca}{mm}{#2}\hfill\phantom{\quad}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{1deg_jra55_iaf_ensemble}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{025deg_jra55_iaf_ensemble}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{01deg_jra55v140_iaf_cycle3}{#2}\hfill\phantom{\quad}\\
+\phantom{\quad}\hfill\icecbar{#1}{aice_m_mm}{1deg_jra55_iaf_ensemble}{#2}\hfill\phantom{\quad}%
+}}
+
+\newcommand{\sicobssixpanelsbias}[2]{% #1=view, #2=date
+%\newcommand{\monthlymean}{1993-2017_mean_month_}
+%\renewcommand{\years}{1993-2017_bias_month_}
+%\renewcommand{\years}{\monthlymean}
+\frame{
+\hfill\icecbarrot[.28\textwidth]{#1}{aice_m_mm}{1deg_jra55_iaf_ensemble}{#2}%
+\iceplotnocbar[.28\textwidth]{#1}{aice}{obs}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{siconc}{mm-obs}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{siconca}{mm-obs}{#2}%\hfill\phantom{\quad}\\
+\icecbarrot[.28\textwidth]{#1}{siconca}{mm-obs}{#2}\\
+\hfill\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{1deg_jra55_iaf_omip2_cycle3-obs}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{025deg_jra55_iaf_omip2_cycle3-obs}{#2}
+\iceplotnocbar[.28\textwidth]{#1}{aice_m_mm}{01deg_jra55v140_iaf_cycle3-obs}{#2}%\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill
+\icecbarrot[.28\textwidth]{#1}{aice_m_mm}{1deg_jra55_iaf_omip2_cycle3-obs}{#2}%\hfill\phantom{\quad}%
+}}
+
+
+%\newcommand{\iceplotnocbar}[5][.495\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment, #5=date
+%\includegraphics[width=#1, trim=45 90 45 7, clip]{figs/#2_#3_#4_\years #5_200dpi.png}
+%}
+
+%\newcommand{\plotnocbar}[2][.495\textwidth]{% #1=width (optional), #2=file
+%\includegraphics[width=#1, trim=45 90 45 7, clip]{#2}
+%}
+
 
 
 %\usebackgroundtemplate{{\centering \includegraphics[width=\paperwidth,keepaspectratio=true]{figures/southern-ocean-faint.png}\par}} 
@@ -494,8 +539,8 @@
 \author{Andrew Kiss\\
 \today\ \DTMcurrenttime\\[4ex]
 latest PDF: \url{https://www.dropbox.com/sh/co9ge6vnqzyjie1/AABXBvaKQhtSvWHA5tTWSfEpa}\\[2ex]
-latest source version: \url{https://github.com/aekiss/ice_analysis}\\[2ex]
-all figures: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
+%latest source version: \url{https://github.com/aekiss/ice_analysis}\\[2ex]
+%all figures: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
 }
 %\vspace{4ex}
 \date{}
@@ -513,8 +558,26 @@ all figures: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/fig
 \frame{\titlepage}
 \usebackgroundtemplate{} 
 
-%\newcommand{\multifig}[1]% #1=expt
-%{
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Background}
+
+\newcommand{\multifig}[1]% #1=expt
+{
+\includegraphics<1>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-01_200dpi}%
+%\includegraphics<2>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-02_200dpi}%
+%\includegraphics<3>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-03_200dpi}%
+\includegraphics<2>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-04_200dpi}%
+%\includegraphics<5>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-05_200dpi}%
+%\includegraphics<6>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-06_200dpi}%
+\includegraphics<3>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-07_200dpi}%
+%\includegraphics<8>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-08_200dpi}%
+%\includegraphics<9>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-09_200dpi}%
+\includegraphics<4>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-10_200dpi}%
+%
 %\includegraphics<1>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-01_200dpi}%
 %\includegraphics<2>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-02_200dpi}%
 %\includegraphics<3>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-03_200dpi}%
@@ -537,277 +600,103 @@ all figures: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/fig
 %\includegraphics<20>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-20_200dpi}%
 %\includegraphics<21>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-21_200dpi}%
 %\includegraphics<22>[width=1.05\textwidth, bb=67 	160 330 384, clip]{figs/Amundsen-Bellingshausen_hi_#1_2017-01-22_200dpi}%
-%}
-%
-%\frame{
-%  \frametitle{COSIMA's global ocean-ice model configurations at \textbf{three resolutions}}
-%\begin{minipage}[t]{0.32\textwidth}
-%\textbf{ACCESS-OM2}\\[-3.5ex]
-%{\small 
-%\begin{itemize}
-%\item not eddy-resolving
-%\itemsep-0.25em 
-%\item \textbf{1$^\circ$} horizontal grid\\[-1ex]
-%\hspace{-2ex}{\tiny $360\times300$ cells, 24--111\,km}
-%\item 50 $z^*$ levels\\[-1ex]
-%\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
-%\item fast and cheap\\[-1ex]
-%\hspace{-2ex}{\tiny $\sim 24$min/yr, 0.1\,kCPU\,hr/yr\\[-1.3ex]on 252 PEs, dt=5400\,s}
-%\item used in ACCESS-CM2
-%%\item suits many-century\\ {experiments}
-%\end{itemize}}
-%\vspace{-1ex}%
-%\multifig{1deg_jra55_iaf_omip2-fixed_cycle1}
-%\end{minipage}
-%\hfill
-%\begin{minipage}[t]{0.32\textwidth}
-% \textbf{ACCESS-OM2-025}\\[-3.5ex]
-%{\small
-%\begin{itemize}
-%\itemsep-0.25em 
-%\item eddy ``permitting''
-%\item \textbf{0.25$^\circ$} horizontal grid\\[-1ex]
-%\hspace{-2ex}{\tiny $1440\times1080$ cells, 6.0--27.8\,km}
-%\item 50 $z^*$ levels\\[-1ex]
-%\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
-%\item fairly fast, less cheap\\[-1ex]
-%\hspace{-2ex}{\tiny 105\,min/yr, 4.5\,kCPU\,hr/yr\\[-1.3ex]on 1824 PEs, dt=1800\,s}
-%%\item suits few-century\\ {experiments}
-%\item for future ACCESS CM
-%\end{itemize}}
-%\vspace{-1ex}%
-%\multifig{025deg_jra55_iaf_amoctopo_cycle1}
-%\end{minipage}
-%\hfill
-%\begin{minipage}[t]{0.32\textwidth}
-%\textbf{ACCESS-OM2-01}\\[-3.5ex]
-%{\small 
-%\begin{itemize}
-%\itemsep-0.25em 
-%\item eddy-rich
-%\item \textbf{0.1$^\circ$} horizontal grid\\[-1ex]
-%\hspace{-2ex}{\tiny $3600\times2700$ cells, 2.2--11.1\,km}
-%\item 75  $z^*$ levels\\[-1ex]
-%\hspace{-2ex}{\tiny $\Delta z=1.1$--198\,m}
-%\item slow, expensive\\[-1ex]
-%\hspace{-2ex}{\tiny 9\,hr/yr, 55--65\,kCPU\,hr/yr\\[-1.3ex]on 5096 PEs, dt=600\,s}
-%%\item suits multi-decade\\ {experiments}
-%\item in~Bluelink~OceanMAPS4
-%\end{itemize}}
-%\vspace{-1ex}%
-%\multifig{01deg_jra55v140_iaf_cycle1}
-%\end{minipage}%\\[2ex]
-%}
-
-%\frame{
-%\frametitle{ACCESS-OM2 suite model components}
-%\begin{minipage}[t]{0.4\textwidth}
-%\vfill
-%\includegraphics[width=\textwidth]{models-diagram/models-diagram-clip.pdf}
-%\vfill
-%\end{minipage}%
-%\begin{minipage}[t]{0.6\textwidth}
-%\textbf{Prescribed atmospheric forcing}
-%\begin{itemize}
-%\item JRA55-do~v1.4.0 reanalysis {\scriptsize (55\,km, 3-hourly)}
-%\item this is the only component tied to observed interannual variations
-%\item no feedback to atmosphere $\Rightarrow$ % (e.g.\ infinite atmospheric heat capacity)
-% atmospheric control of ice and ocean is stronger than in a coupled atmosphere-ice-ocean model %(e.g.\ ACCESS-CM2)
-%\end{itemize}
-%\textbf{Model improvements since v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}}
-%\begin{itemize}
-%\item  {\small relative winds for ice stress calculation}\\[-4ex]
-%\item  {\small latitudinally-varying ocean albedo }\\[-4ex]
-%\item {\small new JRA55-do version, extended to Jan 2019}\\[-4ex]
-%\item  {\small improved topography at all resolutions}\\[-4ex]
-%\item  {\small WOMBAT biogeochemistry support}\\[-4ex]
-%\item  {\small improved speed and scalability at 0.1$^\circ$}\\[-4ex]
-%\item  {\small bug fixes and configuration improvements, etc}
-%\end{itemize}
-%\end{minipage}
-%}
-
+}
 
 \frame{
-\frametitle{Parameter perturbations at 1$^\circ$}
+  \frametitle{COSIMA's global ocean-ice model configurations at \textbf{three resolutions}}
+\begin{minipage}[t]{0.32\textwidth}
+\textbf{ACCESS-OM2}\\[-3.5ex]
+{\small 
 \begin{itemize}
-\item Perturbation experiments are in \texttt{/home/156/aek156/payu/param_ensemble/access-om2}
-\item The control configuration uses the same parameters as \url{https://github.com/COSIMA/1deg_jra55_iaf/tree/985eebd} (apart from diagnostics)
-\item The members of the perturbation ensemble are defined in \url{https://github.com/aekiss/ensemble/blob/1deg_param_ensemble/ensemble.yaml}
-\item Perturbations and control start from 1 January 1968 in the 3rd cycle of Hakase's OMIP2 experiment \texttt{/scratch/v45/hh0162/access-om2/control/1deg_jra55_iaf_omip2-fixed}, and run to the end of 2018 (51 years).
+\item not eddy-resolving
+\itemsep-0.25em 
+\item \textbf{1$^\circ$} horizontal grid\\[-1ex]
+\hspace{-2ex}{\tiny $360\times300$ cells, 24--111\,km}
+\item 50 $z^*$ levels\\[-1ex]
+\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
+\item fast and cheap\\[-1ex]
+\hspace{-2ex}{\tiny $\sim 24$min/yr, 0.1\,kCPU\,hr/yr\\[-1.3ex]on 252 PEs, dt=5400\,s}
+\item used in ACCESS-CM2
+%\item suits many-century\\ {experiments}
+\end{itemize}}
+\vspace{-1ex}%
+\multifig{1deg_jra55_iaf_omip2-fixed_cycle1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.32\textwidth}
+ \textbf{ACCESS-OM2-025}\\[-3.5ex]
+{\small
+\begin{itemize}
+\itemsep-0.25em 
+\item eddy ``permitting''
+\item \textbf{0.25$^\circ$} horizontal grid\\[-1ex]
+\hspace{-2ex}{\tiny $1440\times1080$ cells, 6.0--27.8\,km}
+\item 50 $z^*$ levels\\[-1ex]
+\hspace{-2ex}{\tiny $\Delta z=2.3$--220\,m}
+\item fairly fast, less cheap\\[-1ex]
+\hspace{-2ex}{\tiny 105\,min/yr, 4.5\,kCPU\,hr/yr\\[-1.3ex]on 1824 PEs, dt=1800\,s}
+%\item suits few-century\\ {experiments}
+\item for future ACCESS CM
+\end{itemize}}
+\vspace{-1ex}%
+\multifig{025deg_jra55_iaf_amoctopo_cycle1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.32\textwidth}
+\textbf{ACCESS-OM2-01}\\[-3.5ex]
+{\small 
+\begin{itemize}
+\itemsep-0.25em 
+\item eddy-rich
+\item \textbf{0.1$^\circ$} horizontal grid\\[-1ex]
+\hspace{-2ex}{\tiny $3600\times2700$ cells, 2.2--11.1\,km}
+\item 75  $z^*$ levels\\[-1ex]
+\hspace{-2ex}{\tiny $\Delta z=1.1$--198\,m}
+\item slow, expensive\\[-1ex]
+\hspace{-2ex}{\tiny 9\,hr/yr, 55--65\,kCPU\,hr/yr\\[-1.3ex]on 5096 PEs, dt=600\,s}
+%\item suits multi-decade\\ {experiments}
+\item for~Bluelink
+\end{itemize}}
+\vspace{-1ex}%
+\multifig{01deg_jra55v140_iaf_cycle1}
+\end{minipage}%\\[2ex]
+}
+
+\frame{
+\frametitle{ACCESS-OM2 suite model components}
+\begin{minipage}[t]{0.4\textwidth}
+\vfill
+\includegraphics[width=\textwidth]{models-diagram/models-diagram-clip.pdf}
+\vfill
+\end{minipage}%
+\begin{minipage}[t]{0.6\textwidth}
+\textbf{Prescribed atmospheric forcing: JRA55-do}
+\begin{itemize}
+\item JRA55-do~v1.4.0 {\scriptsize (55\,km, 3-hourly)}
+\item Derived from JRA55 reanalysis but with adjustments for driving ocean models
+\item This is the only component tied to observations (no DA in ice or ocean)
+\item JRA55 assimilated thresholded COBE-SST SIC, set to 1 for SIC$>0.55$, and 0 otherwise
+\item No feedback to atmosphere $\Rightarrow$ % (e.g.\ infinite atmospheric heat capacity)
+ atmospheric control of ice and ocean is stronger than in a coupled atmosphere-ice-ocean model %(e.g.\ ACCESS-CM2)
 \end{itemize}
-}
-
-\frame{
-\frametitle{turning_angle: parameterisation of unresolved Ekman layer}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_turning_angle.pdf}
-}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{01}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{03}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{05}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{07}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{09}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{11}
-\frame{
-\frametitle{turning_angle summary}
+\textbf{Model improvements since v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}}
 \begin{itemize}
-\item Perturbation pattern changes only in amplitude as turning_angle increases
-\item Coastal SIC increases with turning_angle
-\item SIC decreases with turning_angle further offshore
-\item SIC increases with turning_angle in outermost region in spring
-\item Cancellation reduces signal in total area timeseries 
+\item  {\small relative winds for ice stress calculation}\\[-4ex]
+\item  {\small latitudinally-varying ocean albedo }\\[-4ex]
+\item {\small new JRA55-do version, extended to Jan 2019}\\[-4ex]
+\item  {\small improved topography at all resolutions}\\[-4ex]
 \end{itemize}
+\end{minipage}
 }
 
+\section{Control experiments at 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$}
+
 \frame{
-\frametitle{mu_rdg: ridging parameter}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_mu_rdg.pdf}
-}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{01}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{03}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{05}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{07}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{09}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{11}
-\frame{
-\frametitle{mu_rdg summary}
+\frametitle{Control experiments at 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$}
 \begin{itemize}
-\item Perturbation pattern changes only in amplitude as mu_rdg increases
-\item Perturbation pattern has uniform sign in summer and early autumn, with larger (smaller) SIC for mu_rdg smaller (larger) than control value (3)
-\item Perturbation pattern is much weaker and more complex in other seasons; cancellation reduces signal in total area timeseries
-\end{itemize}
-}
-
-
-\frame{
-\frametitle{chio: coefficient of ice-ocean heat flux}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_chio.pdf}
-}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{01}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{03}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{05}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{07}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{09}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{11}
-\frame{
-\frametitle{chio summary}
-\begin{itemize}
-\item Perturbation pattern changes only in amplitude as chio decreases
-\item Perturbation pattern has uniform sign in summer, with SIC increasing as chio decreases from control value (0.006)
-\item Perturbation pattern is weaker and more complex in other seasons; cancellation reduces signal in total area timeseries
-\item Except in summer, there are large areas in which SIC decreases slightly with decreasing chio. 
-From p53 of the CICE manual: 
-\textit{The net downward heat flux from the ice to the ocean is given by:
-$F_\text{bot} =-\rho_wc_wc_hu^{*}(T_w -T_f)$
-where $\rho_w$ is the density of seawater, $c_w$ is the specific heat of seawater, $c_h$ is a heat transfer coefficient [chio], $u^{*}$ is the friction velocity, and $T_w$ is the sea surface temperature.}
-$T_f$ is the freezing temperature.
-So the regions where SIC decreases with decreasing chio are presumably where $F_\text{bot}>0$ i.e.\ heat flows from ice to ocean, i.e.\ $T_w < T_f$.
-\end{itemize}
-}
-
-\frame{
-\frametitle{snowpatch: snow patchiness length scale}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_snowpatch.pdf}
-}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{01}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{03}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{05}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{07}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{09}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{11}
-\frame{
-\frametitle{snowpatch summary}
-\begin{itemize}
-\item snowpatch is used to determine the snow-covered area, which is then used to determine the total albedo from the area-weighted average of the ice and snow albedos. As snowpatch increases, the snow area decreases.
-\item Perturbation pattern changes only in amplitude as snowpatch decreases
-\item Perturbation pattern has uniform sign in summer and early autumn, with SIC increasing as snowpatch decreases from control value (0.02\,m), i.e.\ as snow albedo is weighted more strongly
-\item Perturbation pattern is much weaker and more complex in other seasons; cancellation reduces signal in total area timeseries. 
-\item Presumably snowpatch's effect on the visible albedo is unimportant in the polar night relative to its effect on IR albedo
-\end{itemize}
-}
-
-
-\frame{
-\frametitle{albicev: ice visible albedo}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_albicev.pdf}
-}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{01}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{03}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{05}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{07}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{09}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{11}
-\frame{
-\frametitle{albicev summary}
-\begin{itemize}
-\item Perturbation pattern changes only in amplitude as albicev decreases
-\item Perturbation pattern has uniform sign in summer and early autumn, with SIC decreasing (increasing) for albicev smaller (larger) than control value (0.86)
-\item Perturbation pattern is more complex in other seasons, but the effect of albicev is small in the polar night; cancellation reduces signal in total area timeseries. 
-\end{itemize}
-}
-
-\frame{
-\frametitle{albicei: ice infrared albedo}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_albicei.pdf}
-}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{01}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{03}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{05}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{07}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{09}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{11}
-\frame{
-\frametitle{albicei summary}
-\begin{itemize}
-\item Perturbation pattern changes only in amplitude as albicei decreases
-\item Perturbation pattern has uniform sign in summer and early autumn, with SIC decreasing (increasing) for albicei smaller (larger) than control value (0.44)
-\item Perturbation pattern is more complex in other seasons, but the effect of albicei is small in the polar night; cancellation reduces signal in total area timeseries. 
-\end{itemize}
-}
-
-\frame{
-\frametitle{dragio: ice-ocean drag coefficient}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_dragio.pdf}
-}
-\frame{
-\frametitle{ndte: number of elastic sub-timesteps}
-\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_ndte.pdf}
-}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{01}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{03}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{05}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{07}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{09}
-\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{11}
-\frame{
-\frametitle{dragio and ndte summary}
-\begin{itemize}
-\item Reducing dragio from its control value (0.00536) generally decreases SIC in summer and autumn; patterns are more complex in other seasons, with cancellation between positive and negative regions
-\item Doubling ndte from its control value (120) has greatest effect in summer, where it increases SIC. It has little effect in other seasons except for patchy changes in the MIZ. This generally weak dependence on ndte indicates near-convergence of the EVP solver.
-\end{itemize}
-}
-
-\frame{
-\frametitle{Overall summary}
-\begin{itemize}
-\item Sensitivity to the parameters tested is generally weak over the range of values explored
-\item Sensitivity to these parameters is generally stronger in summer
-\item Perturbation patterns generally don't resemble patterns of the seasonal climatological bias relative to SIC observations, and so cannot remove much of the bias
-\end{itemize}
-}
-
-\frame{
-\frametitle{Resolution dependence}
-}
-
-\frame{
-\frametitle{The model experiments}
-\begin{itemize}
-\item Runs used new configurations that are more consistent than in v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}\\[2ex]
-\item No data assimilation in sea ice or ocean models\\[2ex]
 \item Each resolution was run for \textbf{multiple 61-year cycles}
 \begin{itemize}
-\item Each cycle had 1 Jan 1958 -- 31 Dec 2018 JRA55-do v1.4 forcing
+\item Each cycle had 1 Jan 1958 -- 31 Dec 2018 JRA55-do v1.4.0 forcing
 \item Cycles differ only in their initial condition
 \begin{itemize}
 \item[\textbullet] {\small cycle 1 starts from observed climatology (World Ocean Atlas 2013 v2)}
@@ -819,9 +708,12 @@ So the regions where SIC decreases with decreasing chio are presumably where $F_
 \item \textbf{ACCESS-OM2-01:} \textbf{3 cycles} at 0.1$^\circ$\\[2ex] %\texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf}, \texttt{/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf_cycle2}, \texttt{/scratch/x77/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3} and \texttt{/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3}
 %\item figure script: \url{https://github.com/aekiss/ice_analysis}
 %\item figure files: \texttt{/g/data/v45/aek156/notebooks/github/aekiss/ice_analysis/figs}
-\item All data will be made public (currently available by request)
+%\item All data will be made public (currently available by request)
+\item Runs used new configurations that are more consistent than in v1 {\small (\href{https://doi.org/10.5194/gmd-13-401-2020}{Kiss et al.\ 2020})}\\[2ex]
 \end{itemize}
 }
+
+\subsection{Timeseries}
 
 \frame{
 \frametitle{Timeseries of sea ice extent (area with $>15\%$ concentration), cycle \only<1>{1}\only<2>{2}\only<3>{3}\only<4>{4}\only<5>{5}\only<6>{6}}
@@ -839,48 +731,285 @@ So the regions where SIC decreases with decreasing chio are presumably where $F_
 \end{itemize}
 }
 
-%\frame{
-%\frametitle{ACCESS-OM2 outperforms most OMIP-2 models in March ice extent}
-%ACCESS-OM2, all cycles \& res
-%\hfill
-%OMIP-2, mostly 1$^\circ$ (\href{https://doi.org/10.5194/gmd-13-3643-2020}{Tsujino et al., 2020})
-%\hfill\phantom{x}
-%\begin{minipage}[c]{0.35\textwidth}
-%\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_03.pdf}\\[-1.1ex]
-%\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_09.pdf}\\
-%\end{minipage}%
-%\begin{minipage}[c]{0.65\textwidth}
-%\includegraphics[width=\textwidth]{TsujinoETAL2020a-fig22ghjk}\\
-%\end{minipage}
-%%\vspace{-6ex}
-%{\small
-%JRA55-do v1.4.0 forcing
-%\hfill
-%CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
-%}
+\frame{
+\frametitle{ACCESS-OM2 outperforms most OMIP-2 models in March ice extent}
+ACCESS-OM2, all cycles \& res
+\hfill
+OMIP-2, mostly 1$^\circ$ (\href{https://doi.org/10.5194/gmd-13-3643-2020}{Tsujino et al., 2020})
+\hfill\phantom{x}
+\begin{minipage}[c]{0.35\textwidth}
+\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_03.pdf}\\[-1.1ex]
+\includegraphics[width=\textwidth]{figs/SH_extent_1958-2018_month_09.pdf}\\
+\end{minipage}%
+\begin{minipage}[c]{0.65\textwidth}
+\includegraphics[width=\textwidth]{TsujinoETAL2020a-fig22ghjk}\\
+\end{minipage}
+%\vspace{-6ex}
+{\small
+JRA55-do v1.4.0 forcing
+\hfill
+CORE-II forcing\hfill JRA55-do v1.4.0 forcing\hfill\phantom{x}}
+}
 
 
 \frame{
-\frametitle{1993--2017 mean annual cycle of sea ice extent}
-\includegraphics[width=\textwidth, trim=0 0 0 180, clip]{figs/ice_extent_seasonal_clim_cycle1.pdf}\\
+\frametitle{1993--2017 mean annual cycle of sea ice area and extent}
+\includegraphics[width=\textwidth, trim=0 0 0 180, clip]{figs/ice_area_seasonal_clim_cycle3.pdf}\\
+\includegraphics[width=\textwidth, trim=0 0 0 180, clip]{figs/ice_extent_seasonal_clim_cycle3.pdf}\\
 \hfill {\scriptsize Obs: NOAA/NSIDC G02135 Sea Ice Index v3 (Fetterer et al., 2017)}\\[2ex]
 \begin{itemize}
-\item modelled ice extent is slightly too low at minimum (Feb)
-\item very close to observed extent in March (although concentrations are too low)
-\item extent rises too quickly in Autumn and falls too slowly in Spring
+\item modelled ice area and extent are too low at minimum (Feb)
+\item very close to obs in March
+\item model rises too quickly in Autumn, and extent falls too slowly in Spring
 \end{itemize}
 }
 
-%\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
+\subsection{Monthly climatological maps}
 
-\siccomparefourall{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
+\frame{
+\frametitle{1993--2017 monthly mean SIC climatology and standard deviation}
+\begin{itemize}
+\item Top row, L-R: monthly mean SIC in NSIDC passive microwave\\ and 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$ models
+\item Bottom row, L-R: standard deviation in monthly mean SIC in NSIDC\\ and 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$ models
+\item SIC biases are very similar across model resolutions
+\item interannual variability of SIC is greatest in marginal ice zone (MIZ; i.e. roughly SIC between 0.15 and 0.80)
+\item SIC standard deviation is mostly $<0.4$ so climatological biases are a major component of bias in any particular month
+\end{itemize}
+}
+\renewcommand{\pwidth}{0.23\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_01deg_jra55v140_iaf_cycle3_1993-2017_mean_month_#2_200dpi.png}%
+\cbarrot[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_std_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_1deg_jra55_iaf_omip2_cycle3_1993-2017_std_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_025deg_jra55_iaf_omip2_cycle3_1993-2017_std_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_01deg_jra55v140_iaf_cycle3_1993-2017_std_month_#2_200dpi.png}%
+\cbarrot[\pwidth]{figs/#1_aice_obs_1993-2017_std_month_#2_200dpi.png}\\
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+
+\frame{
+\frametitle{Biases in monthly SIC climatology relative to NSIDC}
+\begin{itemize}
+\item Top row:\\
+-- Left: observational SIC product from NSIDC\\
+-- Middle: bias of siconc (COBE-SST SIC) relative to NSIDC\\
+-- Right: bias of siconca (COBE-SST SIC thresholded daily at 55\% which was assimilated into the JRA55 reanalysis) relative to NSIDC
+\item Bottom row, L-R: model biases at 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$ relative to NSIDC (all from cycle 3) \textbf{NB: different colour scale!}
+\item Model SIC biases are nearly resolution-independent; biases slightly smaller at $0.1^\circ$
+\item Strong low bias in summer throughout all of NSIDC extent apart; weaker high bias in outer Ross \& Amundsen Seas \& Maud
+\item Patchy winter bias in outer MIZ
+\item Model SIC biases are much larger than COBE-SST SIC biases, with unrelated patterns
+\end{itemize}
+}
+%\foreach \m in {01}{\sicobssixpanelsbias{SH}{\m}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\sicobssixpanelsbias{SH}{\m}}
+
+\frame{
+\frametitle{1$^\circ$ biases in monthly SIC climatology relative to NSIDC, siconc, siconca}
+\begin{itemize}
+\item Top row:\\
+-- Left: observational SIC product from NSIDC\\
+-- Middle: siconc (COBE-SST SIC)\\
+-- Right: \textbf{siconca (COBE-SST SIC thresholded daily at 55\% which was assimilated into the JRA55 reanalysis)}
+\item Bottom row, L-R: model bias at 1$^\circ$ (cycle 3) relative to NSIDC, siconc, siconca
+\item Model bias is much larger than the difference between obs products
+\item \textbf{$\Rightarrow$ Model bias is not due to bias in the COBE-SST SIC (siconca) used in JRA55}
+\item ... so we'll plot biases relative to NSIDC from here on
+\end{itemize}
+}
+\renewcommand{\pwidth}{0.28\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_siconc_mm_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_siconca_mm_1993-2017_mean_month_#2_200dpi.png}%
+\cbarrot[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}\\%
+%SH_aice_m_mm_1deg_jra55_iaf_omip2_cycle6-siconca_1993-2017_mean_month_07_200dpi.png
+%\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+%\plotnocbar[\pwidth]{figs/#1_siconc_mm_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-siconc_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-siconca_1993-2017_mean_month_#2_200dpi.png}\\%
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-siconc_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-siconca_1993-2017_mean_month_#2_200dpi.png}%
+%\cbarrot[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-siconca_1993-2017_mean_month_#2_200dpi.png}%
+%\cbarrot[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+%\plotnocbar[\pwidth]{figs/#1_daidtt_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_thermo_tendency_month_#2_200dpi.png}\\
+%\cbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_tendency_month_#2_200dpi.png}%
+%\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_mean_tendency_month_#2_200dpi.png}%
+%\cbar[\pwidth]{figs/#1_daidtt_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_thermo_tendency_month_#2_200dpi.png}\\
+%\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+%\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}%
+%\plotnocbar[\pwidth]{figs/#1_daidtd_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_dynamics_tendency_month_#2_200dpi.png}\\
+%\cbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+%\cbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}%
+%\cbar[\pwidth]{figs/#1_daidtd_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_dynamics_tendency_month_#2_200dpi.png}
+}}
+%\newcommand{\months}{01,02,03,04,05,06,07,08,09,10,11,12}
+%\sicobsbias{SH}{01}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+
+
+\subsection{SIC histograms}
+
+\frame{
+\frametitle{Histograms: model SIC vs observed SIC}
+\begin{itemize}
+\item Monthly mean at each model grid cell compared to obs, for each year over 1993--2017 --- assesses whether ice has the right concentration at each place and time (rather than in climatological mean)
+\item Model predicts pattern of high SIC much better in winter than summer
+\item Marginal ice locations not well predicted (without DA)
+\item Higher resolution gives better predictions
+\end{itemize}
+}
+
+
+\renewcommand{\pwidth}{0.29\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\includegraphics[width=\pwidth]{figs/#1_aice_m_1deg_jra55_iaf_omip2_cycle3_hist_vs_obs_1993-2017_month_#2_200dpi}\hfill
+\includegraphics[width=\pwidth]{figs/#1_aice_m_025deg_jra55_iaf_omip2_cycle3_hist_vs_obs_1993-2017_month_#2_200dpi}\hfill
+\includegraphics[width=\pwidth]{figs/#1_aice_m_01deg_jra55v140_iaf_cycle3_hist_vs_obs_1993-2017_month_#2_200dpi}\\
+\iceplotnocbar[\pwidth]{#1}{aice_m_mm}{1deg_jra55_iaf_omip2_cycle3-obs}{#2}\hfill
+\iceplotnocbar[\pwidth]{#1}{aice_m_mm}{025deg_jra55_iaf_omip2_cycle3-obs}{#2}\hfill
+\iceplotnocbar[\pwidth]{#1}{aice_m_mm}{01deg_jra55v140_iaf_cycle3-obs}{#2}%\hfill\phantom{\quad}\\
+%\phantom{\quad}\hfill
+\icecbarrot[\pwidth]{#1}{aice_m_mm}{1deg_jra55_iaf_omip2_cycle3-obs}{#2}%\hfill\phantom{\quad}%
+%\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+
+%%\renewcommand{\plotter}[1]{% #1=date
+%\frame{
+%\begin{minipage}[c]{0.72\textwidth}
+%\includegraphics[width=0.49\textwidth]{figs/SH_aice_m_1deg_jra55_iaf_omip2_cycle3_hist_vs_obs_1993-2017_month_02_200dpi}
+%\includegraphics[width=0.49\textwidth]{figs/SH_aice_m_01deg_jra55v140_iaf_cycle3_hist_vs_obs_1993-2017_month_02_200dpi}\\
+%\includegraphics[width=0.49\textwidth]{figs/SH_aice_m_1deg_jra55_iaf_omip2_cycle3_hist_vs_obs_1993-2017_month_09_200dpi}
+%\includegraphics[width=0.49\textwidth]{figs/SH_aice_m_01deg_jra55v140_iaf_cycle3_hist_vs_obs_1993-2017_month_09_200dpi}
+%\end{minipage}
+%\begin{minipage}[c]{0.26\textwidth}
+%\textbf{Bivariate~histograms}\\
+%monthly mean model SIC vs obs SIC at each grid cell for 1993--2017.\\[2ex]
+%Model predicts pattern of high SIC much better in winter than summer.\\[2ex]
+%Marginal ice locations not well predicted (without DA).
+%%Model performance is much better at high concentration and in winter. 
+%\end{minipage}
+%}%}
+%%\foreach \m in {02,09}{\plotter{\m}}
 
 %\end{document}
 
-\frame{\frametitle{Example: daily sea ice concentration in Amundsen-Bellingshausen Sea}}
+\subsection{SIC tendency maps}
 
-\renewcommand{\years}{}
 
+\frame{
+\frametitle{Monthly climatology of SIC tendency}
+\begin{itemize}
+\item Top row, L-R: SIC tendency (change in monthly mean SIC between this month and previous), for NSIDC passive microwave and 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$ models
+\item Bottom row:\\
+-- Left: NSIDC monthly mean SIC\\
+-- the rest: bias (model-obs) in model SIC tendency
+\item SIC tendency biases are very similar across model resolutions
+\item winter biases associated with differing extent of outer MIZ
+\item spring loss too slow in outer ice, too rapid in inner
+\item early autumn recovery too strong, late autumn too weak
+\end{itemize}
+\includegraphics[width=.5\textwidth, trim=0 0 0 180, clip]{figs/ice_area_seasonal_clim_cycle3.pdf}\\
+}
+\renewcommand{\pwidth}{0.235\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_01deg_jra55v140_iaf_cycle3_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\cbarrot[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3_1993-2017_mean_tendency_month_#2_200dpi.png}\\%
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_01deg_jra55v140_iaf_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}%
+\cbarrot[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}\\
+\cbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%\hfill%
+}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+
+\frame{
+\frametitle{Dynamic and thermodynamic contributions to SIC tendency}
+\begin{itemize}
+\item Top row:\\
+-- Left: NSIDC SIC tendency (change in monthly mean SIC between this month and previous)\\
+-- Middle: 1$^\circ$ tendency  (change in monthly mean SIC between this month and previous)\\
+-- Right: 1$^\circ$ tendency due to thermodynamics (SIC change over the month)
+\item Bottom row:\\
+-- Left: NSIDC monthly mean SIC\\
+-- Middle: 1$^\circ$ tendency bias (model - obs)\\
+-- Right: 1$^\circ$ tendency due to dynamics (SIC change over the month)
+\item winter tendency is balance between competing thermo \& dynamics
+\item thermo dominates spring decrease
+\item early autumn recovery driven by thermo, subsequently reduced by dynamics
+\end{itemize}
+}
+\renewcommand{\pwidth}{0.28\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_daidtt_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_thermo_tendency_month_#2_200dpi.png}\\
+\cbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_mean_tendency_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_daidtt_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_thermo_tendency_month_#2_200dpi.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_daidtd_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_dynamics_tendency_month_#2_200dpi.png}\\
+\cbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3_1993-2017_tendency_bias_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_daidtd_m_mm_1deg_jra55_iaf_omip2_cycle3_1993-2017_dynamics_tendency_month_#2_200dpi.png}
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+
+
+%\end{document}
+
+%\frame{
+%\frametitle{Monthly climatology of sea ice concentration}
+%\begin{itemize}
+%\item Top row, L-R: observational SIC products from NSIDC, COBE-SST, and \textbf{COBE-SST thresholded daily at 55\% as input to JRA55 reanalysis}
+%\item Bottom row, L-R: model SIC at 1$^\circ$, 0.25$^\circ$ and 0.1$^\circ$ (all from cycle 3)
+%\item 
+%\end{itemize}
+%}
+%%\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\sicobssixpanels{SH}{\m}}
+%\foreach \m in {01}{\sicobssixpanels{SH}{\m}}
+
+
+\subsection{Mass tendency terms}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[height=.6\textheight]{figs/SH_1deg_jra55_iaf_ensemble_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}\hfill
+\includegraphics[height=.55\textheight]{LiHuangLiLiuFan2021a-fig8.jpg}\\
+\hfill CMIP6 1979--2014 multi-model mean\\
+\hfill (Li et al., 2021)
+}
+
+\subsection{Daily maps}
+
+\frame{\frametitle{Example: daily sea ice concentration in Amundsen-Bellingshausen Sea}
+\begin{itemize}
+\item Very similar daily SIC at the 3 resolutions
+\end{itemize}
+}
 %\newcommand{\sicfourpanelsAB}[8][.28\textwidth]{% #1=width (optional), #2=view, #3=variable, #4=experiment1, #5=experiment2, #6=experiment3, #7=experiment4, #8=date
 %\frame{
 %\hfill\iceplotnocbar[#1]{#2}{#3}{#4}{#8}%
@@ -926,34 +1055,38 @@ So the regions where SIC decreases with decreasing chio are presumably where $F_
 \end{minipage}
 }}
 
+\renewcommand{\years}{}
 
 \newcommand{\ABaice}[1]{% cycle 1 at 3 resolutions
 \sicfourpanelsAB{Amundsen-Bellingshausen}{aice}{obs}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{#1}{SIC}}
 \ABaice{2017-01-01}
-\ABaice{2017-01-02}
-\ABaice{2017-01-03}
-\ABaice{2017-01-04}
+%\ABaice{2017-01-02}
+%\ABaice{2017-01-03}
+%\ABaice{2017-01-04}
 \ABaice{2017-01-05}
-\ABaice{2017-01-06}
-\ABaice{2017-01-07}
-\ABaice{2017-01-08}
+%\ABaice{2017-01-06}
+%\ABaice{2017-01-07}
+%\ABaice{2017-01-08}
 \ABaice{2017-01-09}
-\ABaice{2017-01-10}
-\ABaice{2017-01-11}
-\ABaice{2017-01-12}
+%\ABaice{2017-01-10}
+%\ABaice{2017-01-11}
+%\ABaice{2017-01-12}
 \ABaice{2017-01-13}
-\ABaice{2017-01-14}
-\ABaice{2017-01-15}
-\ABaice{2017-01-16}
+%\ABaice{2017-01-14}
+%\ABaice{2017-01-15}
+%\ABaice{2017-01-16}
 \ABaice{2017-01-17}
-\ABaice{2017-01-18}
-\ABaice{2017-01-19}
-\ABaice{2017-01-20}
+%\ABaice{2017-01-18}
+%\ABaice{2017-01-19}
+%\ABaice{2017-01-20}
 \ABaice{2017-01-21}
-\ABaice{2017-01-22}
+%\ABaice{2017-01-22}
 
-\frame{\frametitle{3 cycles of the 0.1$^\circ$ experiment}}
-
+\frame{\frametitle{3 cycles of the 0.1$^\circ$ experiment}
+\begin{itemize}
+\item Nearly identical in the 3 cycles apart from smallest scales due to uncorrelated eddies
+\end{itemize}
+}
 \newcommand{\sicfourpanelsABcyc}[8]{% #1=view, #2=variable, #3=experiment1, #4=experiment2, #5=experiment3, #6=experiment4, #7=date, #8=title
 \frame{
 \frametitle{#8\\{\small #7}}
@@ -995,48 +1128,613 @@ So the regions where SIC decreases with decreasing chio are presumably where $F_
 %\sicfourpanels[.4\textwidth]{Amundsen-Bellingshausen}{aice}{obs}{01deg_jra55v140_iaf_cycle1}{01deg_jra55v140_iaf_cycle2}{01deg_jra55v140_iaf_cycle3}{#1}}
 \sicfourpanelsABcyc{Amundsen-Bellingshausen}{aice}{obs}{01deg_jra55v140_iaf_cycle1}{01deg_jra55v140_iaf_cycle2}{01deg_jra55v140_iaf_cycle3}{#1}{SIC}}
 \ABaice{2017-01-01}
-
-
-\ABaice{2017-01-02}
-\ABaice{2017-01-03}
-\ABaice{2017-01-04}
+%\ABaice{2017-01-02}
+%\ABaice{2017-01-03}
+%\ABaice{2017-01-04}
 \ABaice{2017-01-05}
-\ABaice{2017-01-06}
-\ABaice{2017-01-07}
-\ABaice{2017-01-08}
+%\ABaice{2017-01-06}
+%\ABaice{2017-01-07}
+%\ABaice{2017-01-08}
 \ABaice{2017-01-09}
-\ABaice{2017-01-10}
-\ABaice{2017-01-11}
-\ABaice{2017-01-12}
+%\ABaice{2017-01-10}
+%\ABaice{2017-01-11}
+%\ABaice{2017-01-12}
 \ABaice{2017-01-13}
-\ABaice{2017-01-14}
-\ABaice{2017-01-15}
-\ABaice{2017-01-16}
+%\ABaice{2017-01-14}
+%\ABaice{2017-01-15}
+%\ABaice{2017-01-16}
 \ABaice{2017-01-17}
-\ABaice{2017-01-18}
-\ABaice{2017-01-19}
-\ABaice{2017-01-20}
+%\ABaice{2017-01-18}
+%\ABaice{2017-01-19}
+%\ABaice{2017-01-20}
 \ABaice{2017-01-21}
-\ABaice{2017-01-22}
+%\ABaice{2017-01-22}
 \renewcommand{\years}{\monthlymean}
+
+
+
+\section{Perturbation experiments at 1$^\circ$ and 0.25$^\circ$}
+
+%\subsection{Overview}
+
+\frame{
+\frametitle{Parameter perturbations at 1$^\circ$ and 0.25$^\circ$}
+\begin{itemize}
+%\item Perturbation experiments are in \texttt{/home/156/aek156/payu/param_ensemble/access-om2}
+%\item The control configuration uses the same parameters as \url{https://github.com/COSIMA/1deg_jra55_iaf/tree/985eebd} (apart from diagnostics)
+%\item The members of the perturbation ensemble are defined in \url{https://github.com/aekiss/ensemble/blob/1deg_param_ensemble/ensemble.yaml}
+\item Perturbations from 1 January 1968 in the 3rd cycle %of Hakase's OMIP2 experiment \texttt{/scratch/v45/hh0162/access-om2/control/1deg_jra55_iaf_omip2-fixed}, 
+and run to the end of 2018 (51 years).
+\item Only one parameter varied at a time.
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{Parameter perturbations at 1$^\circ$ (control values in \textbf{bold}; 0.25$^\circ$ in \textcolor{red}{red})}
+\begin{itemize}
+\item    ice/cice_in.nml:
+\begin{itemize}
+\item        shortwave_nml:
+\begin{itemize}
+\item            albicei: [ 0.36, 0.39, \textbf{0.44}, 0.47 ] (ice IR albedo)
+\item            albicev: [ 0.78, 0.81, \textbf{0.86}, \textcolor{red}{0.90} ] (ice visible albedo)
+\item            snowpatch: [ 0.005, 0.01, \textbf{0.02} ] (snow patchiness)
+\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item        thermo_nml:
+\begin{itemize}
+\item            chio: [ 0.001, 0.002, 0.003, 0.004, \textbf{0.006} ] (ice-ocean heat transfer coeff)%# see Uotila et al 2012
+\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item        dynamics_nml:
+\begin{itemize}
+\item            turning_angle: [ \textbf{0}, 1, 2, \ldots %3, 4, 5, 6, 7, 8, 
+\textcolor{red}{5}, \ldots
+9, 10, 12, 14, \ldots %16, 18, 20, 22, 
+24, 26 ] (ocean Ek layer)
+\item            dragio: [ \textcolor{red}{0.004}, \textbf{0.00536}] (ice-ocean drag coeff)
+\item            mu_rdg: [ 2, \textbf{3}, 4, \textcolor{red}{5} ] (ridging scale)
+\item            ndte: [ \textbf{120}, 240 ] (elastic sub-timesteps)
+%#            revised_evp: [ true, false ]  # true requires a shorter timestep (at least at first)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item    ocean/input.nml:
+%#        auscom_ice_nml:
+%#            aice_cutoff: [ ]
+\begin{itemize}
+\item        ocean_vert_mix_nml:
+\begin{itemize}
+\item            j09_bgmax: [ 1.e-6, \textbf{5.e-6}, 1.e-5 ] (ocean vertical diffusivity)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+}
+
+
+%\frame{
+%\frametitle{Parameter perturbations at 1$^\circ$ and 0.25$^\circ$}
+%\begin{itemize}
+%\item Perturbation experiments are in \texttt{/home/156/aek156/payu/param_ensemble/access-om2}
+%\item The control configuration uses the same parameters as \url{https://github.com/COSIMA/1deg_jra55_iaf/tree/985eebd} (apart from diagnostics)
+%\item The members of the perturbation ensemble are defined in \url{https://github.com/aekiss/ensemble/blob/1deg_param_ensemble/ensemble.yaml}
+%\item Perturbations and control start from 1 January 1968 in the 3rd cycle of Hakase's OMIP2 experiment \texttt{/scratch/v45/hh0162/access-om2/control/1deg_jra55_iaf_omip2-fixed}, and run to the end of 2018 (51 years).
+%\end{itemize}
+%}
+
+\subsection{turning angle}
+
+\frame{
+\frametitle{turning_angle: parameterisation of unresolved Ekman layer}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_turning_angle.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+%\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_turning_angle_5_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}
+\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_turning_angle_16_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}
+\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_turning_angle_26_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.24\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_turning_angle_5_-control_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_turning_angle_16_-control_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_turning_angle_26_-control_1993-2017_mean_month_#2_200dpi.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_turning_angle_5_-control_1993-2017_mean_month_#2_200dpi.png}\\
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[0.5\textwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_turning_angle_5_-control_1993-2017_mean_month_#2_200dpi.png}
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+
+\renewcommand{\pwidth}{0.24\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_turning_angle_5_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_turning_angle_16_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_turning_angle_26_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_turning_angle_5_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}\\
+\cbar[0.5\textwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_26}{}{_turning_angle_5_-control}{_turning_angle_26_-control}{11}
+
+
+%\frame{
+%\frametitle{turning_angle: parameterisation of unresolved Ekman layer}
+%\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_turning_angle.pdf}
+%}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_5}{}{_turning_angle_5_-control}{_turning_angle_5_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_025deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_5}{}{_turning_angle_5_-control}{_turning_angle_5_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_5}{}{_turning_angle_5_-control}{_turning_angle_5_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_025deg_jra55_iaf_ensemble}{_turning_angle_5}{_turning_angle_5}{}{_turning_angle_5_-control}{_turning_angle_5_-control}{09}
+
+\frame{
+\frametitle{turning_angle summary}
+\begin{itemize}
+\item Insignificant impact on overall bias
+\item Little dependence on resolution
+\item Perturbation pattern changes only in amplitude as turning_angle increases
+\item Coastal SIC increases with turning_angle
+\item SIC decreases with turning_angle further offshore
+\item SIC increases with turning_angle in outermost region in spring
+\item Cancellation reduces signal in total area timeseries
+\end{itemize}
+}
+
+\subsection{dragio and ndte}
+
+\frame{
+\frametitle{dragio: ice-ocean drag coefficient}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_dragio.pdf}
+}
+
+\frame{
+\frametitle{ndte: number of elastic sub-timesteps}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_ndte.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_dragio_0.004_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}
+\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_ndte_240_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.24\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_dragio_0.004_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_ndte_240_-control_1993-2017_mean_month_#2_200dpi}.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_dragio_0.004_-control_1993-2017_mean_month_#2_200dpi}.png}\\
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[0.5\textwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_dragio_0.004_-control_1993-2017_mean_month_#2_200dpi}.png}
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+
+\renewcommand{\pwidth}{0.24\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_dragio_0.004_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_ndte_240_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_dragio_0.004_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\
+\cbar[0.5\textwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+
+%%\frame{
+%%\frametitle{dragio}
+%%\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_mu_rdg.pdf}
+%%}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_dragio_0.004}{}{_dragio_0.004_-control}{_dragio_0.004_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_025deg_jra55_iaf_ensemble}{_dragio_0.004}{_dragio_0.004}{}{_dragio_0.004_-control}{_dragio_0.004_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_dragio_0.004}{}{_dragio_0.004_-control}{_dragio_0.004_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_025deg_jra55_iaf_ensemble}{_dragio_0.004}{_dragio_0.004}{}{_dragio_0.004_-control}{_dragio_0.004_-control}{09}
+
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_dragio_0.004}{_ndte_240}{}{_dragio_0.004_-control}{_ndte_240_-control}{11}
+\frame{
+\frametitle{dragio and ndte summary}
+\begin{itemize}
+\item Neither dragio nor ndte make much difference to bias
+\item Little dependence on resolution
+\item Reducing dragio from its control value (0.00536) generally decreases SIC in summer and autumn; patterns are more complex in other seasons, with cancellation between positive and negative regions
+\item Doubling ndte from its control value (120) has greatest effect in summer, where it increases SIC. It has little effect in other seasons except for patchy changes in the MIZ. This generally weak dependence on ndte indicates near-convergence of the EVP solver.
+\end{itemize}
+}
+
+\subsection{mu_rdg}
+
+\frame{
+\frametitle{mu_rdg: ridging parameter}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_mu_rdg.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_mu_rdg_5_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}
+\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_mu_rdg_2_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.24\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_mu_rdg_5_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_mu_rdg_4_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_mu_rdg_2_-control_1993-2017_mean_month_#2_200dpi}.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_mu_rdg_5_-control_1993-2017_mean_month_#2_200dpi}.png}\\%
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[0.5\textwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_mu_rdg_5_-control_1993-2017_mean_month_#2_200dpi}.png}%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+
+\renewcommand{\pwidth}{0.24\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_mu_rdg_5_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_mu_rdg_4_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_mu_rdg_2_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_mu_rdg_5_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\
+\cbar[0.5\textwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+
+
+%\frame{
+%\frametitle{mu_rdg}
+%\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_mu_rdg.pdf}
+%}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_5}{_mu_rdg_5}{}{_mu_rdg_5_-control}{_mu_rdg_5_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_025deg_jra55_iaf_ensemble}{_mu_rdg_5}{_mu_rdg_5}{}{_mu_rdg_5_-control}{_mu_rdg_5_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_5}{_mu_rdg_5}{}{_mu_rdg_5_-control}{_mu_rdg_5_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_025deg_jra55_iaf_ensemble}{_mu_rdg_5}{_mu_rdg_5}{}{_mu_rdg_5_-control}{_mu_rdg_5_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_mu_rdg_2}{_mu_rdg_5}{}{_mu_rdg_2_-control}{_mu_rdg_5_-control}{11}
+
+\frame{
+\frametitle{mu_rdg summary}
+\begin{itemize}
+\item Impact on bias is weak
+\item Little dependence on resolution
+\item Perturbation pattern changes only in amplitude as mu_rdg increases
+\item Perturbation pattern has uniform sign in summer and early autumn, with larger (smaller) SIC for mu_rdg smaller (larger) than control value (3)
+\item Perturbation pattern is much weaker and more complex in other seasons; cancellation reduces signal in total area timeseries
+\end{itemize}
+}
+
+\subsection{j09_bgmax}
+
+\frame{
+\frametitle{j09_bgmax: non-equatorial background vertical diffusivity}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_j09_bgmax.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_j09_bgmax_1e-06_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}
+\includegraphics[width=.49\textwidth]{figs/SH_1deg_jra55_iaf_ensemble_j09_bgmax_1e-05_cycle1_1993-2017_mass_terms_seasonal_clim.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_j09_bgmax_1e-06_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_j09_bgmax_1e-05_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}\\%
+\hspace{\pwidth}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_j09_bgmax_1e-06_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_j09_bgmax_1e-05_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_j09_bgmax_1e-06_-control_1993-2017_mean_month_#2_200dpi}.png}%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_j09_bgmax_1e-06}{_j09_bgmax_1e-05}{}{_j09_bgmax_1e-06_-control}{_j09_bgmax_1e-05_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_j09_bgmax_1e-06}{_j09_bgmax_1e-05}{}{_j09_bgmax_1e-06_-control}{_j09_bgmax_1e-05_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_j09_bgmax_1e-06}{_j09_bgmax_1e-05}{}{_j09_bgmax_1e-06_-control}{_j09_bgmax_1e-05_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_j09_bgmax_1e-06}{_j09_bgmax_1e-05}{}{_j09_bgmax_1e-06_-control}{_j09_bgmax_1e-05_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_j09_bgmax_1e-06}{_j09_bgmax_1e-05}{}{_j09_bgmax_1e-06_-control}{_j09_bgmax_1e-05_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_j09_bgmax_1e-06}{_j09_bgmax_1e-05}{}{_j09_bgmax_1e-06_-control}{_j09_bgmax_1e-05_-control}{11}
+\frame{
+\frametitle{j09_bgmax summary}
+\begin{itemize}
+\item Parameter has negligible effect on SIC over range tested
+\item Perturbation pattern changes mainly in amplitude as j09_bgmax increases
+\item Perturbation pattern cancellation reduces signal in total area timeseries
+\end{itemize}
+}
+
+\subsection{chio}
+
+\frame{
+\frametitle{chio: coefficient of ice-ocean heat flux}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_chio.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_chio_0.003_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_chio_0.001_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+%\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.004_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.003_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+%\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.002_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.001_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.004_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\%
+\hspace{\pwidth}%
+%\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.004_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.003_-control_1993-2017_mean_month_#2_200dpi}.png}%
+%\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.002_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.001_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_chio_0.004_-control_1993-2017_mean_month_#2_200dpi}.png}\\%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_chio_0.004}{_chio_0.002}{}{_chio_0.004_-control}{_chio_0.002_-control}{11}
+\frame{
+\frametitle{chio summary}
+\begin{itemize}
+\item Perturbation pattern changes only in amplitude as chio decreases
+\item Perturbation pattern has uniform sign in summer, with SIC increasing as chio decreases from control value (0.006)
+\item Perturbation pattern is weaker and more complex in other seasons; cancellation reduces signal in total area timeseries
+\item Except in summer, there are large areas in which SIC decreases slightly with decreasing chio. 
+From p53 of the CICE manual: 
+\textit{The net downward heat flux from the ice to the ocean is given by:
+$F_\text{bot} =-\rho_wc_wc_hu^{*}(T_w -T_f)$
+where $\rho_w$ is the density of seawater, $c_w$ is the specific heat of seawater, $c_h$ is a heat transfer coefficient [chio], $u^{*}$ is the friction velocity, and $T_w$ is the sea surface temperature.}
+$T_f$ is the freezing temperature.
+So the regions where SIC decreases with decreasing chio are presumably where $F_\text{bot}>0$ i.e.\ heat flows from ice to ocean, i.e.\ $T_w < T_f$.
+\end{itemize}
+}
+
+\subsection{snowpatch}
+
+\frame{
+\frametitle{snowpatch: snow patchiness length scale}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_snowpatch.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_snowpatch_0.01_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_snowpatch_0.005_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_snowpatch_0.01_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_snowpatch_0.005_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_snowpatch_0.005_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\%
+\hspace{\pwidth}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_snowpatch_0.01_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_snowpatch_0.005_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_snowpatch_0.01_-control_1993-2017_mean_month_#2_200dpi}.png}\\%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_snowpatch_0.01}{_snowpatch_0.005}{}{_snowpatch_0.01_-control}{_snowpatch_0.005_-control}{11}
+\frame{
+\frametitle{snowpatch summary}
+\begin{itemize}
+\item snowpatch is used to determine the snow-covered area, which is then used to determine the total albedo from the area-weighted average of the ice and snow albedos. As snowpatch increases, the snow area decreases.
+\item Perturbation pattern changes only in amplitude as snowpatch decreases
+\item Perturbation pattern has uniform sign in summer and early autumn, with SIC increasing as snowpatch decreases from control value (0.02\,m), i.e.\ as snow albedo is weighted more strongly
+\item Perturbation pattern is much weaker and more complex in other seasons; cancellation reduces signal in total area timeseries. 
+\item Presumably snowpatch's effect on the visible albedo is unimportant in the polar night relative to its effect on IR albedo
+\end{itemize}
+}
+
+
+\subsection{albicev}
+
+\frame{
+\frametitle{albicev: ice visible albedo}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_albicev.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_albicev_0.9_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_albicev_0.78_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.9_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.78_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.9_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\%
+\hspace{\pwidth}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.9_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.78_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.9_-control_1993-2017_mean_month_#2_200dpi}.png}\\%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.9_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.78_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicev_0.9_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_albicev_0.9_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi}.png}\\%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicev_0.78}{_albicev_0.9}{}{_albicev_0.78_-control}{_albicev_0.9_-control}{11}
+\frame{
+\frametitle{albicev summary}
+\begin{itemize}
+\item Bias is slightly weaker at 0.25$^\circ$ but has the same pattern as at 1$^\circ$
+\item Perturbation pattern changes only in amplitude as albicev decreases
+\item Perturbation pattern has uniform sign in summer and early autumn, with SIC decreasing (increasing) for albicev smaller (larger) than control value (0.86)
+\item Perturbation pattern is more complex in other seasons, but the effect of albicev is small in the polar night; cancellation reduces signal in total area timeseries. 
+\end{itemize}
+}
+
+\subsection{albicei}
+
+\frame{
+\frametitle{albicei: ice infrared albedo}
+\includegraphics[width=\textwidth]{figs/ice_area_min_mean_max_albicei.pdf}
+}
+
+\frame{
+\frametitle{Sea ice mass tendency terms}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_albicei_0.47_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}
+\includegraphics[width=.49\textwidth]{{figs/SH_1deg_jra55_iaf_ensemble_albicei_0.36_cycle1_1993-2017_mass_terms_seasonal_clim}.pdf}\\
+dashed is control
+}
+
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicei_0.47_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicei_0.36_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicei_0.47_cycle1-obs_1993-2017_mean_month_#2_200dpi}.png}\\%
+\hspace{\pwidth}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicei_0.47_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\plotnocbar[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicei_0.36_-control_1993-2017_mean_month_#2_200dpi}.png}%
+\cbarrot[\pwidth]{{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_albicei_0.47_-control_1993-2017_mean_month_#2_200dpi}.png}\\%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01,03,05,07,09,11}{\plotter{SH}{\m}}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{01}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{03}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{05}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{07}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{09}
+%\sicsixpanelspertcompare{SH}{aice_m_mm_1deg_jra55_iaf_ensemble}{_albicei_0.36}{_albicei_0.47}{}{_albicei_0.36_-control}{_albicei_0.47_-control}{11}
+\frame{
+\frametitle{albicei summary}
+\begin{itemize}
+\item Perturbation pattern changes only in amplitude as albicei decreases
+\item Perturbation pattern has uniform sign in summer and early autumn, with SIC decreasing (increasing) for albicei smaller (larger) than control value (0.44)
+\item Perturbation pattern is more complex in other seasons, but the effect of albicei is small in the polar night; cancellation reduces signal in total area timeseries. 
+\end{itemize}
+}
+
+\section{Summary}
+
+\frame{
+\frametitle{Perturbation summary}
+\begin{itemize}
+\item Sensitivity to the parameters tested is generally weak over the range of values explored
+\item Sensitivity to these parameters is generally stronger in summer
+\item Perturbation patterns generally don't resemble patterns of the seasonal climatological bias relative to SIC observations, and so cannot remove much of the bias
+\item No parameter variations tested made much difference to the overall bias
+\end{itemize}
+}
+
 
 \frame{
 \frametitle{Conclusions}
 \begin{itemize}
 \item New ACCESS-OM2 configurations, run for 366\,yr at 1$^\circ$ \& 0.25$^\circ$, 183\,yr at 0.1$^\circ$
 \item Sea ice extent slightly improved, and much less biased than many OMIP-2 models
-\item Resolution dependence is smaller than bias --- so parameter testing can be done at low resolution and benefit all resolutions
-\item Unclear whether bias is mainly due to model configuration or JRA55-do forcing
+\item Resolution dependence is smaller than bias --- so model improvements at low resolution can benefit all resolutions
 \item Sea ice distribution is very similar in different cycles, indicating dominance by atmospheric forcing with little role for ocean variability
-%\item Common biases, independent of ocean state $\Rightarrow$ JRA55-do bias or poor model parameter choices?
-\item Data to be made publicly available soon
-\end{itemize}
-\textbf{Next steps}
-\begin{itemize}
-\item More detailed comparison to ice and ocean observations
-\item Investigate model parameter dependence to reduce model bias
+\item No silver bullets --- model bias not significantly improved by any parameter changes investigated so far
+\item Bias may be due to JRA55-do forcing (but biases in JRA55-do do not seem to be due to the COBE-SST SIC assimilated by JRA55)
+\item Is this the best we can do with this forcing product? Should we try other parameters? Or other forcing products?
 \end{itemize}
 }
+
+\end{document} 
+
+
+\newcommand{\siccomparefourall}[4]{% #1=view, #2=experiment1, #3=experiment2, #4=experiment3
+\renewcommand{\years}{\monthlymean}
+\siccomparefour{#1}{#2}{#3}{#4}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{02}{1993--2017\\[-1ex]February mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{03}{1993--2017\\[-1ex]March mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{04}{1993--2017\\[-1ex]April mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{05}{1993--2017\\[-1ex]May mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{06}{1993--2017\\[-1ex]June mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{07}{1993--2017\\[-1ex]July mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{08}{1993--2017\\[-1ex]August mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{09}{1993--2017\\[-1ex]September mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{10}{1993--2017\\[-1ex]October mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{11}{1993--2017\\[-1ex]November mean}{SI concentration}
+\siccomparefour{#1}{#2}{#3}{#4}{12}{1993--2017\\[-1ex]December mean}{SI concentration}
+}
+
+%\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
+
+\siccomparefourall{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
+
+%\end{document}
+
 
 %\end{document}
 
