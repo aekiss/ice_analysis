@@ -132,7 +132,9 @@ for res in ['1deg', '025deg']:
 
         exptdict[ekey] = {
             'expt': f,
-            'dbpath': '/home/156/aek156/payu/param_ensemble/param_ensemble.db',
+#             'dbpath': '/home/156/aek156/payu/param_ensemble/param_ensemble.db',
+#             'dbpath': '/home/156/aek156/payu/param_ensemble/param_ensemble_update.db',
+            'dbpath': '/g/data/v45/aek156/cookbook-db/param_ensemble_update.db',
             'desc': '='.join(ekey.replace('_', ' ').rsplit(' ', 1)),
             }
 
@@ -249,10 +251,15 @@ for ekey in ['1deg', '025deg']:
 exptdict['01deg'][1]['expt'] += '_cycle2'
 exptdict['01deg'][1]['exptdir'] += '_cycle2'
 
-exptdict['01deg'][2]['expt'] = '01deg_jra55v140_iaf_cycle3'
-exptdict['01deg'][2]['exptdir'] = '/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3'
-exptdict['01deg'][2]['dbpath'] = '/g/data/v45/aek156/notebooks/github/aekiss/CC_sandbox/cyc3_database_analysis3-20p07.db'
-exptdict['01deg'][2]['session'] = cc.database.create_session(exptdict['01deg'][2]['dbpath'])
+
+exptdict['01deg'][2]['expt'] += '_cycle3'
+exptdict['01deg'][2]['exptdir'] += '_cycle3'
+
+
+# exptdict['01deg'][2]['expt'] = '01deg_jra55v140_iaf_cycle3'
+# exptdict['01deg'][2]['exptdir'] = '/scratch/v45/aek156/access-om2/archive/01deg_jra55v140_iaf_cycle3'
+# exptdict['01deg'][2]['dbpath'] = '/g/data/v45/aek156/notebooks/github/aekiss/CC_sandbox/cyc3_database_analysis3-20p07.db'
+# exptdict['01deg'][2]['session'] = cc.database.create_session(exptdict['01deg'][2]['dbpath'])
 
 
 
