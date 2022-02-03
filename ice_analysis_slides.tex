@@ -1,4 +1,5 @@
 \documentclass[aspectratio=169, xcolor=table]{beamer}
+\usepackage{multicol}
 \usepackage{enumitem}
 %\setlist[enumerate]{label=\arabic*.}% see https://tex.stackexchange.com/questions/24371/does-enumitem-conflict-with-beamer-for-lists/24491
 \setenumerate[1]{label=\arabic*.}\newcounter{ResumeEnumerate}% see https://latex.org/forum/viewtopic.php?t=9362&start=10
@@ -560,8 +561,183 @@ latest PDF: \url{https://www.dropbox.com/sh/co9ge6vnqzyjie1/AABXBvaKQhtSvWHA5tTW
 
 \begin{frame}
   \frametitle{Outline}
+\begin{multicols}{2}
   \tableofcontents
+\end{multicols}
 \end{frame}
+
+\section{GIOMAS}
+
+\subsection{GIOMAS as ``truth''}
+\frame{
+\frametitle{Assessing GIOMAS as ``truth''}
+\begin{itemize}
+\item \href{http://psc.apl.washington.edu/zhang/Global_seaice/index.html}{GIOMAS} is from a coupled ocean-sea ice model (Zhang \& Rothrock, Monthly Weather Review 2003) which assimilates sea ice concentration observations (and nothing else)
+\item GIOMAS SIC more accurate than ACCESS-OM2 (compared to NSIDC obs)
+\begin{itemize}
+\item column 3: climatological bias is much smaller than for ACCESS-OM2
+\item lower left: ACCESS-OM2 bias relative to GIOMAS captures most of bias of ACCESS-OM2 relative to obs (bottom row, column 3) 
+\item column 4 (bivariate histograms): point-by-point monthly mean interannual variation vastly better in GIOMAS SIC than ACCESS-OM2 (due to DA)
+\end{itemize}
+\item GIOMAS also provides estimates of sea ice thickness, snow thickness, ice velocity, and more.
+\begin{itemize}
+\item use GIOMAS as ``truth'' for ACCESS-OM2 comparison --- see following sections
+\item trust/hope that good SIC indicates other fields are also reasonable
+\end{itemize}
+\end{itemize}
+}
+
+\renewcommand{\pwidth}{0.242\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\hfill
+%\cbarrot[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_GIOMAS_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_GIOMAS-obs_1993-2017_mean_month_#2_200dpi.png}%
+%\cbarrot[\pwidth]{figs/#1_aice_m_GIOMAS-obs_1993-2017_mean_month_#2_200dpi.png}%
+\includegraphics[width=\pwidth]{figs/#1_aice_m_GIOMAS_hist_vs_obs_1993-2017_month_#2_200dpi.png}\\
+\hfill
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}%
+\includegraphics[width=\pwidth]{figs/#1_aice_m_1deg_jra55_iaf_ensemble_cycle1_hist_vs_obs_1993-2017_month_#2_200dpi.png}\\
+%\hfill
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}%
+\hfill\phantom{x}
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+%\foreach \m in {}{\plotter{SH}{\m}}
+
+\subsection{Ice thickness bias vs.\ GIOMAS}
+\frame{
+\frametitle{Ice thickness bias vs.\ GIOMAS}
+\begin{itemize}
+\item ice too thin in most locations in all months
+\item SIT bias pattern resembles SIC bias in Jan--Mar but not other months
+\item SIT too thin nearly everywhere in winter, despite relatively unbiased SIC
+\begin{itemize}
+\item \textbf{thin winter SIT sets the stage for overly-rapid SIC decline in spring?} (ice mass loss is dominated by basal melt)
+\end{itemize}
+\item Middle column: MAD* pattern mirrors pattern of large absolute climatological bias --- suggests MAD due more to climatological bias than interannual variability
+\item histograms of point-by-point monthly mean SIT interannual variation
+\begin{itemize}
+\item no pointwise interannual SIT correlation in Dec--Mar (large bias and/or interannual variability)
+\item SIT correlation April--Nov (reduced interannual variability in high SIT regions?): initially about 60\% of GIOMAS SIT (Apr--May), then thicker ice ($>$1m) thickens quickly to match GIOMAS in July--Nov --- \textbf{different SIT growth processes? thermo for thin/early vs.\ ridging for thick/older??}
+\end{itemize}
+\end{itemize}
+{\footnotesize *MAD = mean absolute deviation: mean(abs(model-GIOMAS)) for each month, using monthly mean data for each year: captures bias in both monthly climatology and interannual variability}
+}
+
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[3]{% #1=view, #2=date, #3=var
+\frame{
+\plotnocbar[\pwidth]{figs/#1_#3_m_GIOMAS_1993-2017_mean_month_#2_200dpi.png}\hfill%
+\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_MAD_month_#2_200dpi.png}%
+\cbarrot[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_MAD_month_#2_200dpi.png}%
+\includegraphics[width=\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_cycle1_hist_vs_GIOMAS_1993-2017_month_#2_200dpi.png}\\
+\plotnocbar[\pwidth]{figs/#1_#3_m_mm_1deg_jra55_iaf_ensemble_cycle1_1993-2017_mean_month_#2_200dpi.png}\hfill%
+\plotnocbar[\pwidth]{figs/#1_#3_m_mm_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_mean_month_#2_200dpi.png}\hfill%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_mean_month_#2_200dpi.png}\hfill%
+%\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_RMSE_month_#2_200dpi.png}\\%
+\cbar[\pwidth]{figs/#1_#3_m_mm_1deg_jra55_iaf_ensemble_cycle1_1993-2017_mean_month_#2_200dpi.png}\hfill%
+\cbar[\pwidth]{figs/#1_#3_m_mm_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_mean_month_#2_200dpi.png}\hfill%
+\cbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_mean_month_#2_200dpi.png}\hfill%
+%\cbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_RMSE_month_#2_200dpi.png}
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}{hi}}
+%\foreach \m in {01}{\plotter{SH}{\m}{hi}}
+%\foreach \m in {}{\plotter{SH}{\m}{hi}}
+
+\subsection{Snow thickness bias vs.\ GIOMAS}
+\frame{
+\frametitle{Snow thickness bias vs.\ GIOMAS --- similar to SIT}
+\begin{itemize}
+\item snow bias pattern resembles SIC bias in Feb--Mar but not other months
+\item snow too thin in most locations in all months
+\begin{itemize}
+\item \textbf{low JRA55-do snow precip, or excessive snow-ice production due to thin ice (low freeboard)?}
+\item \textbf{thin snow reduces albedo, increasing summer melt?} (ice mass loss is dominated by basal melt, but is ~20\% top melt in Dec)
+\end{itemize}
+\item Middle column: monthly interannual absolute deviation (MAD) pattern mirrors pattern of large absolute climatological bias --- suggests MAD due more to climatological bias than interannual variability
+\item histograms of point-by-point monthly mean snow interannual variation
+\begin{itemize}
+\item no pointwise interannual now correlation in Dec--Mar (large bias and/or interannual variability)
+\item some correlation May--Nov (reduced interannual variability in snowy regions?): initially about 60\% of GIOMAS snow (May--June), then thicker snow ($>$0.3m) thickens to about 80\% of GIOMAS in Aug--Oct
+\end{itemize}
+\end{itemize}
+}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}{hs}}
+%\foreach \m in {01}{\plotter{SH}{\m}{hs}}
+%\foreach \m in {}{\plotter{SH}{\m}{hs}}
+
+\subsection{Ice concentration MAD vs.\ turning angle}
+\frame{
+\frametitle{Ice concentration MAD vs.\ turning angle (cf.\ GIOMAS)}
+\begin{itemize}
+\item top left: control case mean absolute deviation (MAD) with respect to GIOMAS
+\item the rest: MAD difference from control at different turning angles (blue is an improvement) -- NB: different scale
+\item MAD change has the same pattern but increasing magnitude with increasing turning angle
+\item Jan--April: MAD improves (blue) over most of the area as turning angle increases, but worsens (red) in Weddell gyre and coastal Ross, Amundsen Bellingshausen and King Haakon seas
+\item May--June: MAD mostly improves in outer ice (better placement of 15\% SIC contour) but worsens in coastal E.\ Antarctic
+\item July--Dec: 
+\begin{itemize}
+\item MAD changes increase in magnitude over July--Dec
+\item Outer ice change becomes mixed improvement/deterioration
+\item Mid-pack deterioration increases to cover most of the area
+\item Improvement in coastal East Antarctic
+\end{itemize}
+\end{itemize}
+}
+
+\renewcommand{\pwidth}{0.3\textwidth}
+\renewcommand{\plotter}[3]{% #1=view, #2=date, #3=var
+\frame{
+\cbarrot[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_MAD_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_cycle1-GIOMAS_1993-2017_MAD_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_turning_angle_5_cycle1-GIOMAS_1993-2017_MAD-control_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_turning_angle_10_cycle1-GIOMAS_1993-2017_MAD-control_month_#2_200dpi.png}\\
+\cbarrot[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_turning_angle_26_cycle1-GIOMAS_1993-2017_MAD-control_month_#2_200dpi.png}%
+%\cbarrot[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_turning_angle_5_cycle1-GIOMAS_1993-2017_MAD-control_month_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_turning_angle_16_cycle1-GIOMAS_1993-2017_MAD-control_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_turning_angle_20_cycle1-GIOMAS_1993-2017_MAD-control_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_#3_m_1deg_jra55_iaf_ensemble_turning_angle_26_cycle1-GIOMAS_1993-2017_MAD-control_month_#2_200dpi.png}%
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}{aice}}
+%\foreach \m in {}{\plotter{SH}{\m}{aice}}
+
+\subsection{Ice thickness MAD vs.\ turning angle}
+\frame{
+\frametitle{Ice thickness MAD vs.\ turning angle (cf.\ GIOMAS)}
+\begin{itemize}
+\item top left: control case mean absolute deviation (MAD) with respect to GIOMAS
+\item the rest: MAD difference from control at different turning angles (blue is an improvement) -- NB: different scale
+\item MAD change has the same pattern but increasing magnitude with increasing turning angle
+\item Jan--March: MAD improves (blue) in most of outer ice and southwest Weddell, but worsens (red) in coastal areas and Weddell gyre
+\item April--Dec: 
+\begin{itemize}
+\item MAD changes increase in magnitude over April--Nov
+\item Outer and mid ice change is mostly deterioration; grows to cover most of the area
+\item Improvement in most coastal areas
+\end{itemize}
+\end{itemize}
+}
+
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}{hi}}
+%\foreach \m in {}{\plotter{SH}{\m}{hi}}
+
+%\end{document}
+
+\subsection{Snow thickness MAD vs.\ turning angle}
+\frame{
+\frametitle{Snow thickness MAD vs.\ turning angle (cf.\ GIOMAS)}
+}
+%\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}{hs}}
+
+
 
 \section{Background}
 
@@ -1729,11 +1905,12 @@ dashed is control
 \siccomparefour{#1}{#2}{#3}{#4}{12}{1993--2017\\[-1ex]December mean}{SI concentration}
 }
 
+
 %\siccomparefour{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}{01}{1993--2017\\[-1ex]January mean}{SI concentration}
 
 \siccomparefourall{SH}{1deg_jra55_iaf_omip2-fixed_cycle1}{025deg_jra55_iaf_amoctopo_cycle1}{01deg_jra55v140_iaf_cycle1}
 
-%\end{document}
+\end{document}
 
 
 %\end{document}
