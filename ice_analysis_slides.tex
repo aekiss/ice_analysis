@@ -26,6 +26,7 @@
 \usepackage{tabularx}
 %\usepackage{media9}
 \usepackage{sistyle} % TODO: replace with siunitx?
+\usepackage{natbib}
 
 % - from  CTAN: http://www.ctan.org/tex-archive/macros/latex/contrib/movie15/
 % see http://darkwing.uoregon.edu/~noeckel/PDFmovie.html
@@ -566,6 +567,34 @@ latest PDF: \url{https://www.dropbox.com/sh/co9ge6vnqzyjie1/AABXBvaKQhtSvWHA5tTW
 \end{multicols}
 \end{frame}
 
+\section{JRA55 and JRA55-do vs ERA5}
+
+\frame{
+\frametitle{JRA55 and JRA55-do vs ERA5}
+
+\begin{itemize}
+\item The JRA55 reanalysis uses observed COBE-SST SIC thresholded at 55\%. The resulting sharp edge and anomalously low SAT are ameliorated by ad-hoc smoothing and a floor applied to SAT in JRA55-do (see \href{https://www.sciencedirect.com/science/article/pii/S146350031830235X}{Tsujino et al. 2018 sec 3.3.4}).
+\item Next slide: biases of JRA55-do (top row) and JRA55 (bottom row) relative to ERA5 for Feb, April, Sept, Nov. Contours are 15\% SIC (gray=obs, colours=ACCESS-OM2 at 1, 0.25, 0.1 deg) and model land mask (thick black).
+\item JRA55-do is generally closer to ERA5 than JRA55 is, but the adjustments seem overdone in the Atlantic and Indian sectors and underdone in the Pacific, at least in Apr-Nov.
+\item ERA5 is biased warm relative to obs in the Weddell Sea \citep{KingMarshallColwellArndtAllenSaderPhillips2022a}, so these JRA55-do SAT biases might explain the pattern of SIC biases in ACCESS-OM2
+\end{itemize}
+}
+
+\renewcommand{\pwidth}{0.243\textwidth}
+\frame{
+\plotnocbar[\pwidth]{figs/SH_JRA55-do_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_02_200dpi.png}%
+\plotnocbar[\pwidth]{figs/SH_JRA55-do_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_04_200dpi.png}%
+\plotnocbar[\pwidth]{figs/SH_JRA55-do_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_09_200dpi.png}%
+\plotnocbar[\pwidth]{figs/SH_JRA55-do_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_11_200dpi.png}\\
+\plotnocbar[\pwidth]{figs/SH_JRA55_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_02_200dpi.png}%
+\plotnocbar[\pwidth]{figs/SH_JRA55_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_04_200dpi.png}%
+\plotnocbar[\pwidth]{figs/SH_JRA55_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_09_200dpi.png}%
+\plotnocbar[\pwidth]{figs/SH_JRA55_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_11_200dpi.png}\\
+\hfill\cbar[0.5\textwidth]{figs/SH_JRA55-do_tas_mm-ERA5_t2m_mm_1993-2017_mean_month_02_200dpi.png}\hfill\phantom{x}%
+}
+
+%\end{document}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{GIOMAS}
 
 \subsection{GIOMAS as ``truth''}
@@ -582,7 +611,7 @@ latest PDF: \url{https://www.dropbox.com/sh/co9ge6vnqzyjie1/AABXBvaKQhtSvWHA5tTW
 \item GIOMAS also provides estimates of sea ice thickness, snow thickness, ice velocity, and more.
 \begin{itemize}
 \item use GIOMAS as ``truth'' for ACCESS-OM2 comparison --- see following sections
-\item trust/hope that good SIC indicates other fields are also reasonable
+\item trust/hope that good SIC indicates other fields are also reasonable - TODO: compare GIOMAS thickness to obs, e.g.\citet{KacimiKwok2020a}, \citet{WorbySteerLieserHeilYiMarkusAllisonMassomGalin2011a}, \citet{WorbyGeigerPagetVan-WoertAckleyDeLiberty2008a}; also compare with SOSE? and LEGOS/CTOH \url{https://sealevel.colorado.edu/link/legos-ctoh} Ka-Ku band altimetry-derived SIT and SNOWH? see \url{https://cosima.org.au/wp-content/uploads/2022/12/Zhaohui-Wang-SIT_SNOWH_NWP_COSMIA_poster-2022-11-25-14.16.pdf}
 \end{itemize}
 \end{itemize}
 }
