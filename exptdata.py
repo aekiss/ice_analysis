@@ -337,4 +337,5 @@ if __name__ == '__main__':
 \hline
 \end{tabularx}''')
     else:
-        print(' '.join(e for e in exptdirs), end='')  # for use in get_namelists.sh
+        pass
+        # print(' '.join(e for e in exptdirs), end='')  # for use in get_namelists.sh
