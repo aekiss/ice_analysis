@@ -112,7 +112,27 @@ exptdict = OrderedDict([
                 'offset': None,
                 'gridpaths': ['/g/data/ik11/grids/ocean_grid_01.nc', '/g/data/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf/output000/ocean/ocean-2d-area_t.nc'],
                 'res': '0.1°'
-                 })
+                 }),
+    ('1degERA5',   {'model': 'access-om2-era5',
+                'expt': '1deg_era5_iaf',
+                'exptdir': '/g/data/ik11/outputs/access-om2/1deg_era5_iaf',
+                'desc': 'ACCESS-OM2-ERA5',
+                'n_files': None,
+                'time_units': 'days since 0001-01-01',
+                'offset': None,
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_10.nc'],
+                'res': '1°'
+               }),
+    ('025degERA5', {'model': 'access-om2-025-era5',
+                'expt': '025deg_era5_iaf',
+                'exptdir': '/g/data/ik11/outputs/access-om2/025deg_era5_iaf',
+                'desc': 'ACCESS-OM2-025-ERA5',
+                'n_files' : None,
+                'time_units': 'days since 0001-01-01',
+                'offset': None,
+                'gridpaths': ['/g/data/ik11/grids/ocean_grid_025.nc'],
+                'res': '0.25°'
+               }),
 ])
 
 # add parameter ensembles
