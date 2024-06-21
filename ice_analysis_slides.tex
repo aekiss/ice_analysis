@@ -567,6 +567,55 @@ latest PDF: \url{https://www.dropbox.com/sh/co9ge6vnqzyjie1/AABXBvaKQhtSvWHA5tTW
 \end{multicols}
 \end{frame}
 
+\section{ERA5-forced runs}
+
+\subsection{SIC under ERA5 vs.\ JRA55-do forcing}
+\frame{
+\frametitle{SIC under ERA5 vs.\ JRA55-do forcing}
+{\tiny
+\begin{itemize}
+\item Biases in ERA5-forced run (cycle 1) are very similar (though generally worse) those in JRA55-do-forced run (cycle3)
+\item ERA5-forced SIC generally lower than JRA55-do-forced (more likely to have negative bias)
+\item Summer low SIC bias is worse under ERA5 forcing
+\item Similar results at 1$^\circ$ and 0.25$^\circ$
+\end{itemize}
+}
+}
+
+\renewcommand{\pwidth}{0.242\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\hfill
+\cbarrot[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_ensemble_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_era5_iaf_cycle1_1993-2017_mean_month_#2_200dpi.png}\\
+\hfill
+\cbarrot[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_1deg_era5_iaf_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+
+\renewcommand{\pwidth}{0.242\textwidth}
+\renewcommand{\plotter}[2]{% #1=view, #2=date
+\frame{
+\hfill
+\cbarrot[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_ensemble_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_era5_iaf_cycle1_1993-2017_mean_month_#2_200dpi.png}\\
+\hfill
+\cbarrot[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_jra55_iaf_omip2_cycle3-obs_1993-2017_mean_month_#2_200dpi.png}%
+\plotnocbar[\pwidth]{figs/#1_aice_m_mm_025deg_era5_iaf_cycle1-obs_1993-2017_mean_month_#2_200dpi.png}
+}}
+\foreach \m in {01,02,03,04,05,06,07,08,09,10,11,12}{\plotter{SH}{\m}}
+%\foreach \m in {01}{\plotter{SH}{\m}}
+
+\end{document}
+
 \section{JRA55 and JRA55-do vs ERA5}
 
 \frame{
